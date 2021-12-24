@@ -680,7 +680,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
     if (!self.callSession) {
         [self callDidDisconnect];
     } else {
-        [self.callSession accept:self.callSession.mediaType];
+        [self.callSession accept];
     }
 }
 
@@ -764,7 +764,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
         [self.callSession setVideoView:nil userId:self.callSession.targetId];
 
         if (self.callSession.callStatus == RCSCallStatusIncoming) {
-            [self.callSession accept:RCSCallMediaTypeAudio];
+            [self.callSession accept];
         }
 
         if ([self.callSession changeMediaType:RCSCallMediaTypeAudio]) {
