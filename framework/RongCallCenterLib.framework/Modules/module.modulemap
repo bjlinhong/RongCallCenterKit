@@ -1,0 +1,6 @@
+framework module RongCallCenterLib {
+  umbrella header "RongCallCenterLib.h"
+
+  export *
+  module * { export * }
+}
