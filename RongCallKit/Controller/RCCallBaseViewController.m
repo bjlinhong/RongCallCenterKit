@@ -194,7 +194,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
     if (self.needPlayingAlertAfterForeground) {
         [self checkApplicationStateAndAlert];
     } else if (self.needPlayingRingAfterForeground) {
-        [self shouldRingForIncomingCall];
+        [self callSession:self.callSession shouldRingForIncomingCall:self.callSession.callId];
     }
 }
 
@@ -333,7 +333,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
         self.tipsLabel.text = RCCallKitLocalizedString(@"VoIPCallWaitingForRemoteAccept");
     } else if (self.callSession.callStatus == RCSCallStatusIncoming) {
         if (self.needPlayingRingAfterForeground) {
-            [self shouldRingForIncomingCall];
+            [self callSession:self.callSession shouldRingForIncomingCall:self.callSession.callId];
         }
         if (self.callSession.mediaType == RCSCallMediaTypeAudio) {
             self.tipsLabel.text = RCCallKitLocalizedString(@"VoIPAudioCallIncoming");
@@ -341,7 +341,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
             self.tipsLabel.text = RCCallKitLocalizedString(@"VoIPVideoCallIncoming");
         }
     } else if (self.callSession.callStatus == RCSCallStatusIdle) {
-        [self callDidDisconnect];
+        [self callSession:self.callSession callDidDisconnect:self.callSession.callId];
     }
 
     [self resetLayout:self.callSession.isMultiCall
@@ -678,7 +678,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
     [[RCCXCall sharedInstance] answerCXCall];
 
     if (!self.callSession) {
-        [self callDidDisconnect];
+        [self callSession:self.callSession callDidDisconnect:self.callSession.callId];
     } else {
         [self.callSession accept];
     }
@@ -711,7 +711,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
     [self didTapHangupButton];
 
     if (!self.callSession) {
-        [self callDidDisconnect];
+        [self callSession:self.callSession callDidDisconnect:self.callSession.callId];
     } else {
         [self.callSession hangup];
     }
@@ -1568,7 +1568,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
 /*!
  通话已接通
  */
-- (void)callDidConnect {
+- (void)callSession:(RCSCallSession *)session callDidConnect:(NSString *)callId {
     [self callWillConnect];
     if (self.callSession.mediaType == RCSCallMediaTypeAudio &&
         [self.callSession.caller isEqualToString:[RCIMClient sharedRCIMClient].currentUserInfo.userId]) {
@@ -1584,7 +1584,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
 /*!
  通话已结束
  */
-- (void)callDidDisconnect {
+- (void)callSession:(RCSCallSession *)session callDidDisconnect:(NSString *)callId{
     [self callWillDisconnect];
     [[RCCXCall sharedInstance] endCXCall];
     [RCCallKitUtility clearScreenForceOnStatus];
@@ -1616,7 +1616,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
 
  @param userId 对端的用户ID
  */
-- (void)remoteUserDidRing:(NSString *)userId {
+- (void)callSession:(RCSCallSession *)session remoteUserDidRing:(NSString *)userId {
     [self resetLayout:self.callSession.isMultiCall
             mediaType:self.callSession.mediaType
            callStatus:self.callSession.callStatus];
@@ -1628,7 +1628,9 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
  @param userId    被邀请的用户ID
  @param mediaType 希望被邀请者选择的媒体类型
  */
-- (void)remoteUserDidInvite:(NSString *)userId mediaType:(RCSCallMediaType)mediaType {
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidInvite:(NSString *)userId
+          mediaType:(RCSCallMediaType)mediaType {
     [self resetLayout:self.callSession.isMultiCall
             mediaType:self.callSession.mediaType
            callStatus:self.callSession.callStatus];
@@ -1640,7 +1642,9 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
  @param userId    用户ID
  @param mediaType 用户的媒体类型
  */
-- (void)remoteUserDidJoin:(NSString *)userId mediaType:(RCSCallMediaType)mediaType {
+- (void)callSession:(RCSCallSession *)session
+  remoteUserDidJoin:(NSString *)userId
+          mediaType:(RCSCallMediaType)mediaType {
     [self resetLayout:self.callSession.isMultiCall
             mediaType:self.callSession.mediaType
            callStatus:self.callSession.callStatus];
@@ -1652,7 +1656,9 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
  @param userId    用户ID
  @param mediaType 切换至的媒体类型
  */
-- (void)remoteUserDidChangeMediaType:(NSString *)userId mediaType:(RCSCallMediaType)mediaType {
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidChangeMediaType:(NSString *)userId
+          mediaType:(RCSCallMediaType)mediaType {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.callSession.isMultiCall) {
             if (mediaType == RCSCallMediaTypeAudio) {
@@ -1663,7 +1669,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
                        callStatus:self.callSession.callStatus];
             }
         } else if (self.callSession.mediaType == mediaType && mediaType == RCSCallMediaTypeVideo) {
-            [self remoteUserDidDisableCamera:NO byUser:userId];
+            [self callSession:self.callSession remoteUserDidDisableCamera:NO byUser:userId];
         }
     });
 }
@@ -1674,7 +1680,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
  @param userId    用户ID
  @param muted     是否关闭camera
  */
-- (void)remoteUserDidDisableCamera:(BOOL)muted byUser:(NSString *)userId {
+- (void)callSession:(RCSCallSession *)session remoteUserDidDisableCamera:(BOOL)muted byUser:(NSString *)userId {
     [self resetLayout:self.callSession.isMultiCall
             mediaType:self.callSession.mediaType
            callStatus:self.callSession.callStatus];
@@ -1686,7 +1692,9 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
  @param userId 用户ID
  @param reason 挂断的原因
  */
-- (void)remoteUserDidLeft:(NSString *)userId reason:(RCSCallDisconnectReason)reason {
+- (void)callSession:(RCSCallSession *)session
+  remoteUserDidLeft:(NSString *)userId
+             reason:(RCSCallDisconnectReason)reason {
     [self resetLayout:self.callSession.isMultiCall
             mediaType:self.callSession.mediaType
            callStatus:self.callSession.callStatus];
@@ -1695,14 +1703,16 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
 /*!
  对方正在振铃，可以播放对应的彩铃
  */
-- (void)shouldAlertForWaitingRemoteResponse {
+- (void)callSession:(RCSCallSession *)session
+shouldAlertForWaitingRemoteResponse:(NSString *)callId {
     //    [self checkApplicationStateAndAlert];
 }
 
 /*!
  收到电话，可以播放铃声
  */
-- (void)shouldRingForIncomingCall {
+- (void)callSession:(RCSCallSession *)session
+shouldRingForIncomingCall:(NSString *)callId {
     if ([RCIMClient sharedRCIMClient].sdkRunningMode == RCSDKRunningMode_Foreground) {
         NSString *ringPath = [[[NSBundle mainBundle] pathForResource:@"RongCallKit" ofType:@"bundle"]
             stringByAppendingPathComponent:@"voip/voip_call.mp3"];
@@ -1716,7 +1726,8 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
 /*!
  停止播放铃声(通话接通或挂断)
  */
-- (void)shouldStopAlertAndRing {
+- (void)callSession:(RCSCallSession *)session
+shouldStopAlertAndRing:(NSString *)callId {
     self.needPlayingRingAfterForeground = NO;
     self.needPlayingAlertAfterForeground = NO;
     [self stopPlayRing];
@@ -1729,7 +1740,8 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
 
  @warning 如果是不可恢复的错误，SDK会挂断电话并回调callDidDisconnect。
  */
-- (void)errorDidOccur:(RCSCallStatusCode)error {
+- (void)callSession:(RCSCallSession *)session
+      errorDidOccur:(RCSCallStatusCode)error; {
     if ([self respondsToSelector:@selector(tipsWillShow:)]) {
         if (![self tipsWillShow:error]) {
             return;
@@ -1745,7 +1757,9 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
  @param txQuality   上行网络质量
  @param rxQuality   下行网络质量, 接收到的所有远端用户网络质量的平均值
  */
-- (void)networkTxQuality:(RCSCallQuality)txQuality rxQuality:(RCSCallQuality)rxQuality {
+- (void)callSession:(RCSCallSession *)session
+   networkTxQuality:(RCSCallQuality)txQuality
+          rxQuality:(RCSCallQuality)rxQuality {
     dispatch_async(dispatch_get_main_queue(), ^{
         switch (txQuality) {
             case RCSCallQualityUnknown:
@@ -1803,13 +1817,16 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
     }
 }
 
-- (void)receiveRemoteUserVideoFirstKeyFrame:(NSString *)userId {
+- (void)callSession:(RCSCallSession *)session
+receiveRemoteUserVideoFirstKeyFrame:(NSString *)userId {
     self.tipsLabel.text = @"";
     self.receivedFirstKeyFrame = YES;
     [self startActiveTimer];
 }
 
-- (void)receiveRemoteUserVideoFirstAudioFrame:(NSString *)userId {
+
+- (void)callSession:(RCSCallSession *)session
+receiveRemoteUserVideoFirstAudioFrame:(NSString *)userId {
     self.tipsLabel.text = @"";
     self.receivedFirstKeyFrame = YES;
     [self startActiveTimer];

@@ -510,7 +510,7 @@
 /*!
  通话已接通
  */
-- (void)callDidConnect {
+- (void)callSession:(RCSCallSession *)session callDidConnect:(NSString *)callId {
     [self.userCollectionView removeFromSuperview];
     _userCollectionView = nil;
     if (![self.callSession.caller isEqualToString:currentUserId]) {
@@ -520,7 +520,7 @@
     }
     [self userCollectionView];
     [self updateAllSubUserLayout];
-    [super callDidConnect];
+    [super callSession:session callDidConnect:callId];
 }
 
 /*!
@@ -528,7 +528,7 @@
 
  @param userId 对端的用户ID
  */
-- (void)remoteUserDidRing:(NSString *)userId {
+- (void)callSession:(RCSCallSession *)session remoteUserDidRing:(NSString *)userId {
     RCCallUserCallInfoModel *model = [self getModelInSubUserModelList:userId];
     [self updateSubUserLayout:model];
 }
@@ -539,7 +539,9 @@
  @param userId    被邀请的用户ID
  @param mediaType 希望被邀请者选择的媒体类型
  */
-- (void)remoteUserDidInvite:(NSString *)userId mediaType:(RCSCallMediaType)mediaType {
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidInvite:(NSString *)userId
+          mediaType:(RCSCallMediaType)mediaType {
     RCCallUserCallInfoModel *model = [self generateUserModel:userId];
     [self addSubUserModel:model];
 
@@ -564,7 +566,9 @@
  @param userId    用户ID
  @param mediaType 用户的媒体类型
  */
-- (void)remoteUserDidJoin:(NSString *)userId mediaType:(RCSCallMediaType)mediaType {
+- (void)callSession:(RCSCallSession *)session
+  remoteUserDidJoin:(NSString *)userId
+          mediaType:(RCSCallMediaType)mediaType {
     if (![userId isEqualToString:self.mainModel.userId]) {
         RCCallUserCallInfoModel *model = [self getModelInSubUserModelList:userId];
         if (!model) {
@@ -581,7 +585,7 @@
  @param userId    用户ID
  @param muted     是否关闭camera
  */
-- (void)remoteUserDidDisableCamera:(BOOL)muted byUser:(NSString *)userId {
+- (void)callSession:(RCSCallSession *)session remoteUserDidDisableCamera:(BOOL)muted byUser:(NSString *)userId {
     // ignore
 }
 
@@ -591,7 +595,9 @@
  @param userId 用户ID
  @param reason 挂断的原因
  */
-- (void)remoteUserDidLeft:(NSString *)userId reason:(RCSCallDisconnectReason)reason {
+- (void)callSession:(RCSCallSession *)session
+  remoteUserDidLeft:(NSString *)userId
+             reason:(RCSCallDisconnectReason)reason {
     if ([userId isEqualToString:self.mainModel.userId]) {
         if (self.callSession.callStatus == RCSCallStatusIncoming ||
             self.callSession.callStatus == RCSCallStatusConnected) {

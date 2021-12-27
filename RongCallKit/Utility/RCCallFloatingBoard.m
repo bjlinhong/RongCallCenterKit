@@ -365,14 +365,14 @@ static NSString *RCVoipFloatingBoardPosY = @"RCVoipFloatingBoardPosY";
 /*!
  通话已接通
  */
-- (void)callDidConnect {
+- (void)callSession:(RCSCallSession *)session callDidConnect:(NSString *)callId {
     [self updateBoard];
 }
 
 /*!
  通话已结束
  */
-- (void)callDidDisconnect {
+- (void)callSession:(RCSCallSession *)session callDidDisconnect:(NSString *)callId {
     [[RCCXCall sharedInstance] endCXCall];
     [self updateBoard];
     [self hideCallFloatingBoard];
@@ -386,7 +386,7 @@ static NSString *RCVoipFloatingBoardPosY = @"RCVoipFloatingBoardPosY";
 
  @param userId 对端的用户ID
  */
-- (void)remoteUserDidRing:(NSString *)userId {
+- (void)callSession:(RCSCallSession *)session remoteUserDidRing:(NSString *)userId {
 }
 
 /*!
@@ -395,7 +395,9 @@ static NSString *RCVoipFloatingBoardPosY = @"RCVoipFloatingBoardPosY";
  @param userId    被邀请的用户ID
  @param mediaType 希望被邀请者选择的媒体类型
  */
-- (void)remoteUserDidInvite:(NSString *)userId mediaType:(RCSCallMediaType)mediaType {
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidInvite:(NSString *)userId
+          mediaType:(RCSCallMediaType)mediaType {
 }
 
 /*!
@@ -404,7 +406,9 @@ static NSString *RCVoipFloatingBoardPosY = @"RCVoipFloatingBoardPosY";
  @param userId    用户ID
  @param mediaType 用户的媒体类型
  */
-- (void)remoteUserDidJoin:(NSString *)userId mediaType:(RCSCallMediaType)mediaType {
+- (void)callSession:(RCSCallSession *)session
+  remoteUserDidJoin:(NSString *)userId
+          mediaType:(RCSCallMediaType)mediaType {
 }
 
 /*!
@@ -413,7 +417,9 @@ static NSString *RCVoipFloatingBoardPosY = @"RCVoipFloatingBoardPosY";
  @param userId    用户ID
  @param mediaType 切换至的媒体类型
  */
-- (void)remoteUserDidChangeMediaType:(NSString *)userId mediaType:(RCSCallMediaType)mediaType {
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidChangeMediaType:(NSString *)userId
+          mediaType:(RCSCallMediaType)mediaType {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.callSession.isMultiCall) {
             if (mediaType == RCSCallMediaTypeAudio && self.callSession.mediaType != RCSCallMediaTypeAudio) {
@@ -434,7 +440,7 @@ static NSString *RCVoipFloatingBoardPosY = @"RCVoipFloatingBoardPosY";
  @param userId    用户ID
  @param muted     是否关闭camera
  */
-- (void)remoteUserDidDisableCamera:(BOOL)muted byUser:(NSString *)userId {
+- (void)callSession:(RCSCallSession *)session remoteUserDidDisableCamera:(BOOL)muted byUser:(NSString *)userId {
 }
 
 /*!
@@ -443,25 +449,30 @@ static NSString *RCVoipFloatingBoardPosY = @"RCVoipFloatingBoardPosY";
  @param userId 用户ID
  @param reason 挂断的原因
  */
-- (void)remoteUserDidLeft:(NSString *)userId reason:(RCSCallDisconnectReason)reason {
+- (void)callSession:(RCSCallSession *)session
+  remoteUserDidLeft:(NSString *)userId
+             reason:(RCSCallDisconnectReason)reason {
 }
 
 /*!
  对方正在振铃，可以播放对应的彩铃
  */
-- (void)shouldAlertForWaitingRemoteResponse {
+- (void)callSession:(RCSCallSession *)session
+shouldAlertForWaitingRemoteResponse:(NSString *)callId {
 }
 
 /*!
  收到电话，可以播放铃声
  */
-- (void)shouldRingForIncomingCall {
+- (void)callSession:(RCSCallSession *)session
+shouldRingForIncomingCall:(NSString *)callId {
 }
 
 /*!
  停止播放铃声(通话接通或挂断)
  */
-- (void)shouldStopAlertAndRing {
+- (void)callSession:(RCSCallSession *)session
+shouldStopAlertAndRing:(NSString *)callId {
 }
 
 /*!
@@ -471,7 +482,8 @@ static NSString *RCVoipFloatingBoardPosY = @"RCVoipFloatingBoardPosY";
 
  @warning 如果是不可恢复的错误，SDK会挂断电话并回调callDidDisconnect。
  */
-- (void)errorDidOccur:(RCSCallStatusCode)error {
+- (void)callSession:(RCSCallSession *)session
+      errorDidOccur:(RCSCallStatusCode)error; {
 }
 
 - (void)addProximityMonitoringObserver {
