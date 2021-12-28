@@ -342,7 +342,7 @@
     if (self.callSession.isMultiCall) {
         [self inviteNewUser];
     } else {
-        NSLog(@"not support add user for conversation type %zd", self.callSession.conversationType);
+        NSLog(@"not support add user for conversation type %zd", self.callSession.callType);
     }
 }
 

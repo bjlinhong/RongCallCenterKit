@@ -64,7 +64,7 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
     dispatch_once(&onceToken, ^{
         if (pRongVoIP == nil) {
             pRongVoIP = [[RCCall alloc] init];
-//            [[RCSCallManager sharedManager] setDelegate:pRongVoIP];
+            [RCSCallManager sharedManager].callReceiveDelegate = pRongVoIP;
             pRongVoIP.maxMultiAudioCallUserNumber = 20;
             pRongVoIP.maxMultiVideoCallUserNumber = 7;
             pRongVoIP.canIncomingCall = YES;
@@ -424,7 +424,7 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
             title = pushConfig.pushTitle;
         } else {
             RCUserInfo *userInfo = [[RCUserInfoCacheManager sharedManager] getUserInfo:self.currentCallSession.inviter];
-            if (self.currentCallSession.conversationType == ConversationType_PRIVATE) {
+            if (self.currentCallSession.callType == RCSCallTypeSingle) {
                 if (userInfo) {
                     title = userInfo.name;
                 }

@@ -385,7 +385,7 @@
     if (self.callSession.isMultiCall) {
         [self inviteNewUser];
     } else {
-        RCLogI(@"not support add user for conversation type %zd", self.callSession.conversationType);
+        RCLogI(@"not support add user for conversation type %zd", self.callSession.callType);
     }
 }
 

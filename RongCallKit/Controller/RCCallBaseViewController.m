@@ -179,7 +179,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
 
 #pragma mark - getter
 - (RCConversationType)conversationType {
-    return self.callSession.conversationType;
+    return self.callSession.callType;
 }
 
 - (NSString *)targetId {
