@@ -341,7 +341,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
             self.tipsLabel.text = RCCallKitLocalizedString(@"VoIPVideoCallIncoming");
         }
     } else if (self.callSession.callStatus == RCSCallStatusIdle) {
-        [self callSession:self.callSession callDidDisconnect:self.callSession.callId];
+//        [self callSession:self.callSession callDidDisconnect:self.callSession.callId];
     }
 
     [self resetLayout:self.callSession.isMultiCall
