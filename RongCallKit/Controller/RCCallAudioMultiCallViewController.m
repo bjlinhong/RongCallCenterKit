@@ -37,7 +37,8 @@
 - (instancetype)initWithOutgoingCall:(RCConversationType)conversationType
                             targetId:(NSString *)targetId
                           userIdList:(NSArray *)userIdList {
-    return [super initWithOutgoingCall:conversationType
+    return [super initWithOutgoingCall:RCSCallTypeMulti
+                        secretChatType:RCSCallSecretChatTypeNO
                               targetId:targetId
                              mediaType:RCSCallMediaTypeAudio
                             userIdList:userIdList];

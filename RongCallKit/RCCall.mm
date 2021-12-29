@@ -180,6 +180,7 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
                                 } else {
                                     avCallVC = [[RCCallVideoMultiCallViewController alloc]
                                         initWithOutgoingCall:conversationType
+                                                secretChatType:RCSCallSecretChatTypeNO
                                                     targetId:targetId
                                                    mediaType:mediaType
                                                   userIdList:userIdList];

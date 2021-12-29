@@ -31,7 +31,8 @@
 }
 
 - (instancetype)initWithOutgoingCall:(NSString *)targetId mediaType:(RCSCallMediaType)mediaType {
-    return [super initWithOutgoingCall:ConversationType_PRIVATE
+    return [super initWithOutgoingCall:RCSCallTypeSingle
+                        secretChatType:RCSCallSecretChatTypeNO
                               targetId:targetId
                              mediaType:mediaType
                             userIdList:@[targetId]];

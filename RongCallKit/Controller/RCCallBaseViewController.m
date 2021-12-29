@@ -67,6 +67,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
 }
 
 - (instancetype)initWithOutgoingCall:(RCConversationType)conversationType
+                      secretChatType:(RCSCallSecretChatType)secretChatType
                             targetId:(NSString *)targetId
                            mediaType:(RCSCallMediaType)mediaType
                           userIdList:(NSArray *)userIdList {
@@ -114,11 +115,14 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
         [[RCSCallManager sharedManager] setHangupPushConfig:hangupPushConfig];
 
         _callSession = [[RCSCallManager sharedManager] startCall:conversationType
-                                                           targetId:targetId
-                                                                 to:userIdList
-                                                          mediaType:mediaType
-                                                    sessionDelegate:self
-                                                              extra:nil];
+                                                  secretChatType:secretChatType
+                                                        targetId:targetId
+                                                              to:userIdList
+                                                       mediaType:mediaType
+                                                 sessionDelegate:self
+                                                           extra:nil];
+        
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:RCCallNewSessionCreationNotification
                                                             object:_callSession];
         [self didChangeValueForKey:@"callSession"];

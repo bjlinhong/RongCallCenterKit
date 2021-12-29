@@ -226,6 +226,7 @@
  @return ViewController
  */
 - (instancetype)initWithOutgoingCall:(RCConversationType)conversationType
+                      secretChatType:(RCSCallSecretChatType)secretChatType
                             targetId:(NSString *)targetId
                            mediaType:(RCSCallMediaType)mediaType
                           userIdList:(NSArray *)userIdList;
