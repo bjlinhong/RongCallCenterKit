@@ -19,6 +19,7 @@
 #import "RCCallVideoMultiCallViewController.h"
 #import "RCUserInfoCacheManager.h"
 #import "RongCallKitAdaptiveHeader.h"
+#import <RongCallCenterLib/RCSCallDefine.h>
 
 #if __IPHONE_10_0
 #import <UserNotifications/UserNotifications.h>
@@ -170,23 +171,21 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
     if ([self preCheckForStartCall:mediaType]) {
         [self checkSystemPermission:mediaType
                             success:^{
-                                UIViewController *avCallVC = nil;
+            UIViewController *avCallVC = nil;
             if (mediaType == RCSCallMediaTypeAudio) {
-                                    avCallVC = [[RCCallAudioMultiCallViewController alloc]
-                                        initWithOutgoingCall:conversationType
-                                                    targetId:targetId
-                                                  userIdList:userIdList];
-
-                                } else {
-                                    avCallVC = [[RCCallVideoMultiCallViewController alloc]
-                                        initWithOutgoingCall:conversationType
-                                                secretChatType:RCSCallSecretChatTypeNO
-                                                    targetId:targetId
-                                                   mediaType:mediaType
-                                                  userIdList:userIdList];
-                                }
-                                [self presentCallViewController:avCallVC];
-                            }];
+                avCallVC = [[RCCallAudioMultiCallViewController alloc] initWithOutgoingCall:RCSCallTypeMulti
+                                                                                   targetId:targetId
+                                                                                 userIdList:userIdList];
+                
+            } else {
+                avCallVC = [[RCCallVideoMultiCallViewController alloc] initWithOutgoingCall:RCSCallTypeMulti
+                                                                             secretChatType:RCSCallSecretChatTypeNO
+                                                                                   targetId:targetId
+                                                                                  mediaType:mediaType
+                                                                                 userIdList:userIdList];
+            }
+            [self presentCallViewController:avCallVC];
+        }];
     }
 }
 
@@ -258,6 +257,28 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
 }
 
 - (void)presentCallViewController:(UIViewController *)viewController {
+    [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
+    UIWindow *activityWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    activityWindow.windowLevel = UIWindowLevelNormal;
+    activityWindow.rootViewController = viewController;
+
+    NSInteger checker = [RCCallKitUtility compareVersion:[UIDevice currentDevice].systemVersion toVersion:@"13.0"];
+    if (checker >= 0) {
+#ifdef __IPHONE_13_0
+        [activityWindow setWindowScene:[UIApplication sharedApplication].keyWindow.windowScene];
+#endif
+    }
+
+    [activityWindow makeKeyAndVisible];
+    CATransition *animation = [CATransition animation];
+    [animation setDuration:0.3];
+    animation.type = kCATransitionMoveIn;      //可更改为其他方式
+    animation.subtype = kCATransitionFromTop;  //可更改为其他方式
+    [[activityWindow layer] addAnimation:animation forKey:nil];
+    [self.callWindows addObject:activityWindow];
+}
+
+- (void)presentCallViewController000:(UIViewController *)viewController {
     [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
     UIWindow *activityWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     activityWindow.windowLevel = [UIApplication sharedApplication].keyWindow.windowLevel + 1;

@@ -34,7 +34,7 @@
     return [super initWithIncomingCall:callSession];
 }
 
-- (instancetype)initWithOutgoingCall:(RCConversationType)conversationType
+- (instancetype)initWithOutgoingCall:(RCSCallType)callType
                             targetId:(NSString *)targetId
                           userIdList:(NSArray *)userIdList {
     return [super initWithOutgoingCall:RCSCallTypeMulti

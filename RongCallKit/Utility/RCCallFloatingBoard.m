@@ -423,12 +423,12 @@ remoteUserDidChangeMediaType:(NSString *)userId
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.callSession.isMultiCall) {
             if (mediaType == RCSCallMediaTypeAudio && self.callSession.mediaType != RCSCallMediaTypeAudio) {
-                if ([self.callSession changeMediaType:RCSCallMediaTypeAudio]) {
-                    [self.videoView removeFromSuperview];
-                    [self->_floatingButton setImage:[RCCallKitUtility imageFromVoIPBundle:@"voip/audio_min.png"]
-                                           forState:UIControlStateNormal];
-                    [self initBoard];
-                }
+//                if ([self.callSession changeMediaType:RCSCallMediaTypeAudio]) {
+//                    [self.videoView removeFromSuperview];
+//                    [self->_floatingButton setImage:[RCCallKitUtility imageFromVoIPBundle:@"voip/audio_min.png"]
+//                                           forState:UIControlStateNormal];
+//                    [self initBoard];
+//                }
             }
         }
     });

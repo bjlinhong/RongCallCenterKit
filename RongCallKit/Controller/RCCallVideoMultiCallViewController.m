@@ -37,7 +37,7 @@
     return [super initWithIncomingCall:callSession];
 }
 
-- (instancetype)initWithOutgoingCall:(RCConversationType)conversationType
+- (instancetype)initWithOutgoingCall:(RCSCallType)callType
                             targetId:(NSString *)targetId
                           userIdList:(NSArray *)userIdList {
     return [super initWithOutgoingCall:RCSCallTypeMulti
@@ -601,7 +601,8 @@
     _userCollectionView = nil;
     [self userCollectionView];
     [self updateAllSubUserLayout];
-    [self.callSession setVideoView:self.backgroundView userId:self.mainModel.userId];
+//    [self.callSession setVideoView:self.backgroundView userId:self.mainModel.userId];
+    [self.callSession setVideoView:self.backgroundView userId:currentUserId];
     [super callSession:session callDidConnect:callId];
 }
 

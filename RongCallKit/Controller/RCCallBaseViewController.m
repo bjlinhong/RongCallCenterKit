@@ -66,7 +66,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
     return self;
 }
 
-- (instancetype)initWithOutgoingCall:(RCConversationType)conversationType
+- (instancetype)initWithOutgoingCall:(RCSCallType)callType
                       secretChatType:(RCSCallSecretChatType)secretChatType
                             targetId:(NSString *)targetId
                            mediaType:(RCSCallMediaType)mediaType
@@ -83,7 +83,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
 
         RCMessagePushConfig *invitePushConfig = [self getPushConfig];
         RCMessagePushConfig *hangupPushConfig = [self getPushConfig];
-        if (conversationType == ConversationType_PRIVATE) {
+        if (callType == RCSCallTypeSingle) {
             if (!invitePushConfig.pushTitle || invitePushConfig.pushTitle.length == 0) {
                 invitePushConfig.pushTitle = [RCIMClient sharedRCIMClient].currentUserInfo.name;
             }
@@ -114,7 +114,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
         [[RCSCallManager sharedManager] setInvitePushConfig:invitePushConfig];
         [[RCSCallManager sharedManager] setHangupPushConfig:hangupPushConfig];
 
-        _callSession = [[RCSCallManager sharedManager] startCall:conversationType
+        _callSession = [[RCSCallManager sharedManager] startCall:callType
                                                   secretChatType:secretChatType
                                                         targetId:targetId
                                                               to:userIdList
@@ -122,16 +122,16 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
                                                  sessionDelegate:self
                                                            extra:nil];
         
-        
         [[NSNotificationCenter defaultCenter] postNotificationName:RCCallNewSessionCreationNotification
                                                             object:_callSession];
         [self didChangeValueForKey:@"callSession"];
         sem = dispatch_semaphore_create(1);
         queue = dispatch_queue_create("AnswerQueue", DISPATCH_QUEUE_SERIAL);
         
-        if (conversationType == ConversationType_PRIVATE) {
+        if (callType == RCSCallTypeSingle) {
             [[RCCXCall sharedInstance] startCallId:_callSession.callId userId:targetId];
-        } else {
+        }
+        else {
             NSString *str = @"";
             for (NSString *userId in userIdList) {
                 str = [str stringByAppendingFormat:@"%@:::", userId];
@@ -721,6 +721,44 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
     }
 }
 
+- (RCCallTextButton *)switchMediaButton {
+    if (!_switchMediaButton) {
+        _switchMediaButton = [[RCCallTextButton alloc] init];
+        [_switchMediaButton setImage:[RCCallKitUtility imageFromVoIPBundle:@"voip/hang_up.png"]
+                       forState:UIControlStateNormal];
+        [_switchMediaButton setImage:[RCCallKitUtility imageFromVoIPBundle:@"voip/hang_up_hover.png"]
+                       forState:UIControlStateHighlighted];
+        [_switchMediaButton setTitle:RCCallKitLocalizedString(@"VoIPCallHangup") forState:UIControlStateNormal];
+
+        [_switchMediaButton addTarget:self
+                          action:@selector(switchMediaButtonClicked)
+                forControlEvents:UIControlEventTouchUpInside];
+        _switchMediaButton.titleLabel.layer.shadowOpacity = 0.8;
+        _switchMediaButton.titleLabel.layer.shadowRadius = 3.0;
+        _switchMediaButton.titleLabel.layer.shadowColor = [UIColor blackColor].CGColor;
+        _switchMediaButton.titleLabel.layer.shadowOffset = CGSizeMake(0, 1);
+        [self.view addSubview:_switchMediaButton];
+//        _switchMediaButton.hidden = YES;
+    }
+    return _switchMediaButton;
+}
+
+- (void)switchMediaButtonClicked {
+//    hangupButtonClick = YES;
+//    [self didTapHangupButton];
+//
+//    if (!self.callSession) {
+//        [self callSession:self.callSession callDidDisconnect:self.callSession.callId];
+//    } else {
+//        [self.callSession hangup];
+//    }
+    
+    [self.callSession requestChangeMediaType:RCSCallMediaTypeVideo
+                                  completion:^(BOOL succ) {
+        NSLog(@"LLH...... ");
+    }];
+}
+
 - (RCCallTextButton *)cameraCloseButton {
     if (!_cameraCloseButton) {
         _cameraCloseButton = [[RCCallTextButton alloc] init];
@@ -771,11 +809,20 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
             [self.callSession accept];
         }
 
-        if ([self.callSession changeMediaType:RCSCallMediaTypeAudio]) {
-            [self resetLayout:self.callSession.isMultiCall
-                    mediaType:RCSCallMediaTypeAudio
-                   callStatus:self.callSession.callStatus];
-        }
+//        if ([self.callSession changeMediaType:RCSCallMediaTypeAudio]) {
+//            [self resetLayout:self.callSession.isMultiCall
+//                    mediaType:RCSCallMediaTypeAudio
+//                   callStatus:self.callSession.callStatus];
+//        }
+        
+        
+        [self.callSession requestChangeMediaType:RCSCallMediaTypeVideo
+                                      completion:^(BOOL succ) {
+            NSLog(@"LLH...... ");
+        }];
+        
+        
+        
     } else {
         [self.callSession setCameraEnabled:!self.callSession.cameraEnabled];
         [self.cameraCloseButton setSelected:!self.callSession.cameraEnabled];
@@ -1027,6 +1074,13 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
                 RCCallButtonLength, RCCallButtonLength);
             //            [self layoutTextUnderBigImageButton:self.hangupButton];
             self.hangupButton.hidden = NO;
+            
+            
+            self.switchMediaButton.frame = CGRectMake((self.view.frame.size.width - RCCallButtonLength) / 2,
+                                                      self.view.frame.size.height -
+                                                          (RCCallButtonBottomMargin * 2 - RCCallInsideMargin * 2 + RCCallCustomButtonLength / 2 + 1.25f) -
+                                                          13 - RCCallButtonLength / 2 - RCCallExtraSpace - 120,
+                                                      RCCallButtonLength, RCCallButtonLength);
 
             self.acceptButton.hidden = YES;
         }
@@ -1661,6 +1715,18 @@ remoteUserDidInvite:(NSString *)userId
     [self resetLayout:self.callSession.isMultiCall
             mediaType:self.callSession.mediaType
            callStatus:self.callSession.callStatus];
+}
+
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidRequest:(NSString *)userId
+          mediaType:(RCSCallMediaType)mediaType
+         actionType:(RCSCallChangeActionType)actionType {
+    NSLog(@"LLH...... ");
+    
+    [session answerChangeMediaType:mediaType accept:YES completion:^(BOOL succ) {
+        NSLog(@"LLH...... ");
+    }];
+    
 }
 
 /*!

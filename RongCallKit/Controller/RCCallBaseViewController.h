@@ -24,6 +24,7 @@
  会话类型
  */
 @property (nonatomic, assign, readonly) RCConversationType conversationType;
+@property (nonatomic, assign, readonly) RCSCallType callType;
 
 /*!
  会话目标ID
@@ -89,6 +90,7 @@
  挂断Button
  */
 @property (nonatomic, strong) RCCallTextButton *hangupButton;
+@property (nonatomic, strong) RCCallTextButton *switchMediaButton;
 
 /*!
  关闭摄像头的Button  「群聊：关闭摄像头； 单聊：切换为语音通话」
@@ -225,7 +227,7 @@
 
  @return ViewController
  */
-- (instancetype)initWithOutgoingCall:(RCConversationType)conversationType
+- (instancetype)initWithOutgoingCall:(RCSCallType)callType
                       secretChatType:(RCSCallSecretChatType)secretChatType
                             targetId:(NSString *)targetId
                            mediaType:(RCSCallMediaType)mediaType
