@@ -592,6 +592,12 @@
 }
 
 #pragma mark - RCSCallSessionDelegate
+- (void)callSession:(RCSCallSession *)session callDidStarted:(NSString *)callId {
+    [self initAllUserModel];
+    [self resetLayout:self.callSession.isMultiCall
+            mediaType:self.callSession.mediaType
+           callStatus:self.callSession.callStatus];
+}
 
 /*!
  通话已接通
