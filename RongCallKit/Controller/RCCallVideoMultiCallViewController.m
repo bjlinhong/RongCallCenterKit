@@ -607,8 +607,7 @@
     _userCollectionView = nil;
     [self userCollectionView];
     [self updateAllSubUserLayout];
-//    [self.callSession setVideoView:self.backgroundView userId:self.mainModel.userId];
-    [self.callSession setVideoView:self.backgroundView userId:currentUserId];
+    [self.callSession setVideoView:self.backgroundView userId:self.mainModel.userId];
     [super callSession:session callDidConnect:callId];
 }
 
