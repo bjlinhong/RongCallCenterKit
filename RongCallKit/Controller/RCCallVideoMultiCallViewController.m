@@ -407,7 +407,7 @@
                 mediaType:self.mediaType
                    baseOn:self
              selectResult:^(NSArray<NSString *> *userIdList) {
-                 [weakSelf.callSession inviteRemoteUsers:userIdList mediaType:weakSelf.mediaType];
+                 [weakSelf.callSession inviteRemoteUsers:userIdList];
              }];
     } else {
         RCCallSelectMemberViewController *selectViewController = [[RCCallSelectMemberViewController alloc]
@@ -416,7 +416,7 @@
                            mediaType:self.mediaType
                                exist:[existUserIdList copy]
                              success:^(NSArray *addUserIdList) {
-                                 [weakSelf.callSession inviteRemoteUsers:addUserIdList mediaType:weakSelf.mediaType];
+                                 [weakSelf.callSession inviteRemoteUsers:addUserIdList];
                              }];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:selectViewController];
         nav.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -440,7 +440,7 @@
                        mediaType:self.mediaType
                            exist:existUserIdList
                          success:^(NSArray *addUserIdList) {
-                             [weakSelf.callSession inviteRemoteUsers:addUserIdList mediaType:weakSelf.mediaType];
+                             [weakSelf.callSession inviteRemoteUsers:addUserIdList];
                          }];
     UINavigationController *rootVC = [[UINavigationController alloc] initWithRootViewController:selectViewController];
     rootVC.modalPresentationStyle = UIModalPresentationFullScreen;
