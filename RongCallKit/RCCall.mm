@@ -328,6 +328,7 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
 
 
 - (void)dismissCallViewController:(UIViewController *)viewController {
+    self.currentCallSession = nil;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     if ([viewController isKindOfClass:[RCCallBaseViewController class]]) {
         UIViewController *rootVC = viewController;
