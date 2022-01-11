@@ -49,6 +49,7 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
 
 @interface RCCall () <RCSCallReceiveDelegate>
 
+@property (nonatomic, strong) RCSCallSession *currentCallSession;
 @property (nonatomic, strong) NSMutableDictionary *alertInfoDic;
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 @property (nonatomic, strong) NSMutableArray *callWindows;
@@ -124,6 +125,7 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
 - (void)startSingleCallViewController:(NSString *)targetId mediaType:(RCSCallMediaType)mediaType {
     RCCallSingleCallViewController *singleCallViewController =
         [[RCCallSingleCallViewController alloc] initWithOutgoingCall:targetId mediaType:mediaType];
+    self.currentCallSession = singleCallViewController.callSession;
 
     [self presentCallViewController:singleCallViewController];
 }
@@ -157,6 +159,7 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
                                                               mediaType:mediaType
                                                              userIdList:addUserIdList];
                              }];
+        self.currentCallSession = voipCallSelectViewController.callSession;
         UINavigationController *rootVC =
             [[UINavigationController alloc] initWithRootViewController:voipCallSelectViewController];
         rootVC.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -171,7 +174,7 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
     if ([self preCheckForStartCall:mediaType]) {
         [self checkSystemPermission:mediaType
                             success:^{
-            UIViewController *avCallVC = nil;
+            RCCallBaseViewController *avCallVC = nil;
             if (mediaType == RCSCallMediaTypeAudio) {
                 avCallVC = [[RCCallAudioMultiCallViewController alloc] initWithOutgoingCall:RCSCallTypeMulti
                                                                                    targetId:targetId
@@ -184,6 +187,7 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
                                                                                   mediaType:mediaType
                                                                                  userIdList:userIdList];
             }
+            self.currentCallSession = avCallVC.callSession;
             [self presentCallViewController:avCallVC];
         }];
     }
@@ -345,10 +349,6 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
     [viewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (RCSCallSession *)currentCallSession {
-    return [RCSCallManager sharedManager].currentCallSession;
-}
-
 #pragma mark - receive call
 - (void)didReceiveCall:(RCSCallSession *)callSession {
     if (!self.canIncomingCall) {
@@ -356,6 +356,7 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
         return;
     }
 
+    self.currentCallSession = callSession;
     if (!callSession.isMultiCall) {
         RCCallSingleCallViewController *singleCallViewController =
             [[RCCallSingleCallViewController alloc] initWithIncomingCall:callSession];
