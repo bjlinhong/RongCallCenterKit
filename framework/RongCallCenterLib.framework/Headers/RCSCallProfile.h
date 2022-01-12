@@ -32,7 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
 // RCSCallUserProfile List (not include self)
 @property (nonatomic, strong) NSMutableArray *memberProfileList;
 @property (nonatomic, strong) NSMutableArray *unkownMediaIdList;
-@property (nonatomic, strong) NSMutableArray *observerIdList;
 
 // self info
 @property (nonatomic, strong) RCSCallUserProfile *myProfile;
