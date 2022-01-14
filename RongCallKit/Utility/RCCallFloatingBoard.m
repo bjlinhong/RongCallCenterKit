@@ -440,7 +440,7 @@ remoteUserDidChangeMediaType:(NSString *)userId
  @param userId    用户ID
  @param muted     是否关闭camera
  */
-- (void)callSession:(RCSCallSession *)session remoteUserDidDisableCamera:(BOOL)muted byUser:(NSString *)userId {
+- (void)callSession:(RCSCallSession *)session remoteUserDidCameraEnable:(BOOL)muted byUser:(NSString *)userId {
 }
 
 /*!

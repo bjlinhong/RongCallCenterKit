@@ -40,7 +40,7 @@
 - (instancetype)initWithOutgoingCall:(RCSCallType)callType
                             targetId:(NSString *)targetId
                           userIdList:(NSArray *)userIdList {
-    return [super initWithOutgoingCall:RCSCallTypeMulti
+    return [super initWithOutgoingCall:RCSCallTypeMulty
                         secretChatType:RCSCallSecretChatTypeNO
                               targetId:targetId
                              mediaType:RCSCallMediaTypeAudio
@@ -673,7 +673,7 @@ remoteUserDidInvite:(NSString *)userId
  @param userId    用户ID
  @param muted     是否关闭camera
  */
-- (void)callSession:(RCSCallSession *)session remoteUserDidDisableCamera:(BOOL)muted byUser:(NSString *)userId {
+- (void)callSession:(RCSCallSession *)session remoteUserDidCameraEnable:(BOOL)muted byUser:(NSString *)userId {
     if ([userId isEqualToString:self.mainModel.userId] && muted) {
         self.backgroundView.backgroundColor = RongVoIPUIColorFromRGB(0x262e42);
     } else {

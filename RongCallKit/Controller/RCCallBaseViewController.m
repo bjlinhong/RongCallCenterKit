@@ -1748,7 +1748,7 @@ remoteUserDidChangeMediaType:(NSString *)userId
                        callStatus:self.callSession.callStatus];
             }
         } else if (self.callSession.mediaType == mediaType && mediaType == RCSCallMediaTypeVideo) {
-            [self callSession:self.callSession remoteUserDidDisableCamera:NO byUser:userId];
+            [self callSession:self.callSession remoteUserDidCameraEnable:NO byUser:userId];
         }
     });
 }
@@ -1759,7 +1759,7 @@ remoteUserDidChangeMediaType:(NSString *)userId
  @param userId    用户ID
  @param muted     是否关闭camera
  */
-- (void)callSession:(RCSCallSession *)session remoteUserDidDisableCamera:(BOOL)muted byUser:(NSString *)userId {
+- (void)callSession:(RCSCallSession *)session remoteUserDidCameraEnable:(BOOL)muted byUser:(NSString *)userId {
     [self resetLayout:self.callSession.isMultiCall
             mediaType:self.callSession.mediaType
            callStatus:self.callSession.callStatus];

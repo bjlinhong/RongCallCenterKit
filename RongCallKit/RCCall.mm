@@ -176,12 +176,12 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
                             success:^{
             RCCallBaseViewController *avCallVC = nil;
             if (mediaType == RCSCallMediaTypeAudio) {
-                avCallVC = [[RCCallAudioMultiCallViewController alloc] initWithOutgoingCall:RCSCallTypeMulti
+                avCallVC = [[RCCallAudioMultiCallViewController alloc] initWithOutgoingCall:RCSCallTypeMulty
                                                                                    targetId:targetId
                                                                                  userIdList:userIdList];
                 
             } else {
-                avCallVC = [[RCCallVideoMultiCallViewController alloc] initWithOutgoingCall:RCSCallTypeMulti
+                avCallVC = [[RCCallVideoMultiCallViewController alloc] initWithOutgoingCall:RCSCallTypeMulty
                                                                              secretChatType:RCSCallSecretChatTypeNO
                                                                                    targetId:targetId
                                                                                   mediaType:mediaType
