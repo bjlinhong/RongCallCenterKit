@@ -21,11 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *userId;
 
 /*!
- 用户的通话媒体连接ID
- */
-@property (nonatomic, strong) NSString *mediaId;
-
-/*!
  用户所使用的媒体类型
  */
 @property (nonatomic, assign) RCSCallMediaType mediaType;
@@ -73,9 +68,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) RCSCallUserType userType;
 
 /*!
- Blink音频主叫接通前声音输出 Yes:外放 NO:听筒
+ 对端用户发布的音视频资源
  */
-@property (nonatomic, assign) BOOL isSpeakerInAudioMode;
+@property (nonatomic, strong) NSMutableArray *avResourceArray;
 
 /*!
  用户标签
@@ -86,7 +81,6 @@ NS_ASSUME_NONNULL_BEGIN
  初始化用户的通话状态
  
  @param userId     用户ID
- @param mediaId    用户的通话媒体连接ID
  @param mediaType  用户所使用的媒体类型
  @param callStatus 用户的通话状态
  @param startTime  收到通话呼入的时间
@@ -94,7 +88,6 @@ NS_ASSUME_NONNULL_BEGIN
  @return 用户的通话状态对象
  */
 - (instancetype)initWithUserId:(NSString *)userId
-                       mediaId:(NSString * _Nullable)mediaId
                      mediaType:(RCSCallMediaType)mediaType
                     callStatus:(RCSCallStatus)callStatus
                      startTime:(long long)startTime;

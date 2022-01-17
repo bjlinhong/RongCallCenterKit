@@ -14,21 +14,21 @@
 /*!
  媒体类型
  */
-typedef NS_ENUM(NSInteger, RCSCallMediaType) {
+typedef NS_ENUM(NSUInteger, RCSCallMediaType) {
     /*!
      纯音频
      */
-    RCSCallMediaTypeAudio,
+    RCSCallMediaTypeAudio = 0,
     /*!
      音频+视频
      */
-    RCSCallMediaTypeVideo
+    RCSCallMediaTypeVideo = 1
 };
 
 /*!
- 通话类型
+ 音视频引擎支持通话类型
  */
-typedef NS_OPTIONS(NSInteger, RCSCallEngineCapability) {
+typedef NS_OPTIONS(NSUInteger, RCSCallEngineCapability) {
     /*!
      无
      */
@@ -52,9 +52,37 @@ typedef NS_OPTIONS(NSInteger, RCSCallEngineCapability) {
 };
 
 /*!
+ 密聊类型
+ */
+typedef NS_OPTIONS(NSUInteger, RCSCallSecretChatType) {
+    /*!
+     普通
+     */
+    RCSCallSecretChatTypeNO = 0,
+    /*!
+     密聊
+     */
+    RCSCallSecretChatTypeYES = 1
+};
+
+/*!
+ 呼叫类型
+ */
+typedef NS_OPTIONS(NSUInteger, RCSCallType) {
+    /*!
+     单聊
+     */
+    RCSCallTypeSingle = 0,
+    /*!
+     群聊
+     */
+    RCSCallTypeMulty = 1
+};
+
+/*!
  通话状态
  */
-typedef NS_ENUM(NSInteger, RCSCallStatus) {
+typedef NS_ENUM(NSUInteger, RCSCallStatus) {
     /*!
      待机
      */
@@ -85,21 +113,21 @@ typedef NS_ENUM(NSInteger, RCSCallStatus) {
 /*!
  用户类型
  */
-typedef NS_ENUM(NSInteger, RCSCallUserType) {
+typedef NS_ENUM(NSUInteger, RCSCallUserType) {
     /*!
      正常用户, 同时收发音视频数据
      */
-    RCSCallUserTypeNormal = 1,
+    RCSCallUserTypeNormal = 0,
     /*!
      观察者, 仅接收音视频数据
      */
-    RCSCallUserTypeObserver = 2
+    RCSCallUserTypeObserver = 1
 };
 
 /*!
  通话视频参数
  */
-typedef NS_ENUM(NSInteger, RCSVideoProfile) {
+typedef NS_ENUM(NSUInteger, RCSVideoProfile) {
     /*!
      176x132, 10fps, 150kbps
      */
@@ -149,7 +177,7 @@ typedef NS_ENUM(NSInteger, RCSVideoProfile) {
 /*!
  视频显示模式
  */
-typedef NS_ENUM(NSInteger, RCSCallRenderMode) {
+typedef NS_ENUM(NSUInteger, RCSCallRenderMode) {
     /*!
      完整显示, 填充黑边, 等比例填充，直到一个维度到达区域边界
      */
@@ -201,7 +229,7 @@ typedef NS_ENUM(NSUInteger, RCSCallQuality) {
 /*!
  通话结束原因
  */
-typedef NS_ENUM(NSInteger, RCSCallDisconnectReason) {
+typedef NS_ENUM(NSUInteger, RCSCallDisconnectReason) {
     /*!
      己方取消已发出的通话请求
      */
@@ -343,7 +371,7 @@ typedef NS_ENUM(NSInteger, RCSCallDisconnectReason) {
 /*!
  状态码
  */
-typedef NS_ENUM(NSInteger, RCSCallStatusCode) {
+typedef NS_ENUM(NSUInteger, RCSCallStatusCode) {
     /*!
      成功
      */
@@ -411,7 +439,15 @@ typedef NS_ENUM(NSInteger, RCSCallStatusCode) {
     /*!
      己方其他端已加入其他房间
      */
-    RCSCallMediaOtherClientJoinedRoom = 16
+    RCSCallMediaOtherClientJoinedRoom = 16,
+    /*!
+     默认音视频取消发布资源失败
+     */
+    RCSCallMediaServerUnpublishDefaultError = 17,
+    /*!
+     默认视频取消发布资源失败
+     */
+    RCSCallMediaServerUnpublishDefaultVideoError = 18,
 };
 
 /*!
@@ -430,6 +466,32 @@ typedef NS_ENUM(NSUInteger, RCSCallJoinCallType) {
      两端共存, 可同时都在通话中
      */
     RCSCallJoinCallTypeCoexist = 2
+};
+
+/*!
+ 通话变更媒体事件类型
+ */
+typedef NS_ENUM(NSUInteger, RCSCallChangeActionType) {
+    /*!
+     请求
+     */
+    RCSCallChangeActionTypeRequest = 0,
+    /*!
+     同意
+     */
+    RCSCallChangeActionTypeAccept = 1,
+    /*!
+     拒绝
+     */
+    RCSCallChangeActionTypeRefuse = 2,
+    /*!
+     取消
+     */
+    RCSCallChangeActionTypeCancel = 3,
+    /*!
+     公告
+     */
+    RCSCallChangeActionTypeNotice = 4
 };
 
 #endif /* RCSCallDefine_h */

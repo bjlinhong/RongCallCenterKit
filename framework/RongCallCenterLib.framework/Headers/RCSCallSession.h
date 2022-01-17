@@ -13,6 +13,7 @@
 
 @class RCSCallProfile;
 @class RCSCallUserProfile;
+@class RCSCallSession;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,43 +27,119 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  通话已发起
+ 
+ @param session 当前通话会话
+ @param callId 当前通话 ID
+ @discussion
+ 通话已发起
+ 
+ @remarks 代理
  */
-- (void)callDidStarted;
+- (void)callSession:(RCSCallSession *)session callDidStarted:(NSString *)callId;
 
 /*!
  通话已接通
  
+ @param session 当前通话会话
+ @param callId 当前通话 ID
  @discussion
  通话已接通
  
  @remarks 代理
  */
-- (void)callDidConnect;
+- (void)callSession:(RCSCallSession *)session callDidConnect:(NSString *)callId;
 
 /*!
  通话已结束
  
+ @param session 当前通话会话
+ @param callId 当前通话 ID
  @discussion
  通话已结束
  
  @remarks 代理
  */
-- (void)callDidDisconnect;
+- (void)callSession:(RCSCallSession *)session callDidDisconnect:(NSString *)callId;
+
+/*!
+ 主叫端发起呼叫后, 播放等待音
+ 
+ @param session 当前通话会话
+ @param callId 当前通话 ID
+ @discussion
+ 主叫端发起呼叫后, 播放等待音
+ 
+ @remarks 代理
+ */
+- (void)callSession:(RCSCallSession *)session
+shouldAlertForWaitingRemoteResponse:(NSString *)callId;
 
 /*!
  对端用户正在振铃
  
+ @param session 当前通话会话
  @param userId 正在振铃的用户ID
  @discussion
  对端用户正在振铃
  
  @remarks 代理
  */
-- (void)remoteUserDidRing:(NSString *)userId;
+- (void)callSession:(RCSCallSession *)session remoteUserDidRing:(NSString *)userId;
+
+/*!
+ 对端用户正在另一个已接通的通话中
+ 
+ @param session 当前通话会话
+ @param userId 正在通话中的用户ID
+ @discussion
+ 对端用户正在另一个已接通的通话中
+ 
+ @remarks 代理
+ */
+- (void)callSession:(RCSCallSession *)session remoteUserDidBusy:(NSString *)userId;
+
+/*!
+ 对端用户正在另一个尚未接听的呼叫中
+ 
+ @param session 当前通话会话
+ @param userId 正在通话中的用户ID
+ @discussion
+ 对端用户正在另一个尚未接听的呼叫中
+ 
+ @remarks 代理
+ */
+- (void)callSession:(RCSCallSession *)session remoteUserDidCallRing:(NSString *)userId;
+
+/*!
+ 被叫端收到来电后, 播放来电铃声
+ 
+ @param session 当前通话会话
+ @param callId 当前通话 ID
+ @discussion
+ 被叫端收到来电后, 播放来电铃声
+ 
+ @remarks 代理
+ */
+- (void)callSession:(RCSCallSession *)session
+shouldRingForIncomingCall:(NSString *)callId;
+
+/*!
+ 通话接通或挂断时停止播放铃声
+ 
+ @param session 当前通话会话
+ @param callId 当前通话 ID
+ @discussion
+ 通话接通或挂断时停止播放铃声
+ 
+ @remarks 代理
+ */
+- (void)callSession:(RCSCallSession *)session
+shouldStopAlertAndRing:(NSString *)callId;
 
 /*!
  有用户被邀请加入通话
  
+ @param session 当前通话会话
  @param userId 被邀请的用户ID
  @param mediaType 希望被邀请者使用的媒体类型
  @discussion
@@ -70,11 +147,14 @@ NS_ASSUME_NONNULL_BEGIN
  
  @remarks 代理
  */
-- (void)remoteUserDidInvite:(NSString *)userId mediaType:(RCSCallMediaType)mediaType;
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidInvite:(NSString *)userId
+          mediaType:(RCSCallMediaType)mediaType;
 
 /*!
  对端用户加入了通话
  
+ @param session 当前通话会话
  @param userId 用户ID
  @param mediaType 用户的媒体类型
  @discussion
@@ -82,47 +162,14 @@ NS_ASSUME_NONNULL_BEGIN
  
  @remarks 代理
  */
-- (void)remoteUserDidJoin:(NSString *)userId mediaType:(RCSCallMediaType)mediaType;
-
-/*!
- 对端用户切换了媒体类型
- 
- @param userId 用户ID
- @param mediaType 切换至的媒体类型
- @discussion
- 对端用户切换了媒体类型
- 
- @remarks 代理
- */
-- (void)remoteUserDidChangeMediaType:(NSString *)userId mediaType:(RCSCallMediaType)mediaType;
-
-/*!
- 对端用户开启或关闭了麦克风的状态
- 
- @param disabled 是否关闭麦克风
- @param userId 用户ID
- @discussion
- 对端用户开启或关闭了麦克风的状态
- 
- @remarks 代理
- */
-- (void)remoteUserDidDisableMicrophone:(BOOL)disabled byUser:(NSString *)userId;
-
-/*!
- 对端用户开启或关闭了摄像头的状态
- 
- @param disabled 是否关闭摄像头
- @param userId 用户ID
- @discussion
- 对端用户开启或关闭了摄像头的状态
- 
- @remarks 代理
- */
-- (void)remoteUserDidDisableCamera:(BOOL)disabled byUser:(NSString *)userId;
+- (void)callSession:(RCSCallSession *)session
+  remoteUserDidJoin:(NSString *)userId
+          mediaType:(RCSCallMediaType)mediaType;
 
 /*!
  对端用户挂断
  
+ @param session 当前通话会话
  @param userId 用户ID
  @param reason 挂断的原因
  @discussion
@@ -130,11 +177,107 @@ NS_ASSUME_NONNULL_BEGIN
  
  @remarks 代理
  */
-- (void)remoteUserDidLeft:(NSString *)userId reason:(RCSCallDisconnectReason)reason;
+- (void)callSession:(RCSCallSession *)session
+  remoteUserDidLeft:(NSString *)userId
+             reason:(RCSCallDisconnectReason)reason;
+
+/*!
+ 变更当前通话媒体类型时的应答对方响应回调
+ 
+ @param session 当前通话会话
+ @param userId 用户ID
+ @param mediaType 用户的媒体类型
+ @param actionType 变更事件类型
+ @discussion
+ 变更当前通话媒体类型时的应答对方响应回调
+ 
+ @remarks 代理
+ */
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidRequest:(NSString *)userId
+          mediaType:(RCSCallMediaType)mediaType
+         actionType:(RCSCallChangeActionType)actionType;
+
+/*!
+ 对端用户切换了媒体类型
+ 
+ @param session 当前通话会话
+ @param userId 用户ID
+ @param mediaType 切换至的媒体类型
+ @discussion
+ 对端用户切换了媒体类型
+ 仅在视频变更为音频通话时回调, 此变更不需要请求与应答
+ 
+ @remarks 代理
+ */
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidChangeMediaType:(NSString *)userId
+          mediaType:(RCSCallMediaType)mediaType;
+
+/*!
+ 对端用户开启或关闭了麦克风的状态
+ 
+ @param session 当前通话会话
+ @param mute YES:关闭麦克风 NO:打开麦克风
+ @param userId 用户ID
+ @discussion
+ 对端用户开启或关闭了麦克风的状态
+ 
+ @remarks 代理
+ */
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidMicrophoneMute:(BOOL)mute
+             byUser:(NSString *)userId;
+
+/*!
+ 对端用户开启或关闭了摄像头的状态
+ 
+ @param session 当前通话会话
+ @param enable YES:打开摄像头 NO:关闭摄像头
+ @param userId 用户ID
+ @discussion
+ 对端用户开启或关闭了摄像头的状态
+ 
+ @remarks 代理
+ */
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidCameraEnable:(BOOL)enable
+             byUser:(NSString *)userId;
+
+/*!
+ 对端用户发布默认媒体流
+ 
+ @param session 当前通话会话
+ @param streamIdArray 媒体流ID列表
+ @param userId 对端用户ID
+ @discussion
+ 对端用户发布默认媒体流
+ 
+ @remarks 代理
+ */
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidPublish:(NSArray *)streamIdArray
+             byUser:(NSString *)userId;
+
+/*!
+ 对端用户取消发布默认媒体流
+ 
+ @param session 当前通话会话
+ @param streamIdArray 媒体流ID列表
+ @param userId 对端用户ID
+ @discussion
+ 对端用户取消发布默认媒体流
+ 
+ @remarks 代理
+ */
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidunpublish:(NSArray *)streamIdArray
+             byUser:(NSString *)userId;
 
 /*!
  对端用户发布自定义媒体流
  
+ @param session 当前通话会话
  @param streamId 自定义流ID
  @param tag 自定义流标签
  @param mediaType 媒体类型
@@ -143,65 +286,81 @@ NS_ASSUME_NONNULL_BEGIN
  
  @remarks 代理
  */
-- (void)remoteUserDidPublishCustomMediaStream:(NSString *)streamId
-                                    streamTag:(NSString *)tag
-                                    mediaType:(RCSCallMediaType)mediaType;
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidPublishCustomMediaStream:(NSString *)streamId
+          streamTag:(NSString *)tag
+          mediaType:(RCSCallMediaType)mediaType;
 
 /*!
  对端用户取消发布自定义媒体流
  
+ @param session 当前通话会话
  @param streamId 自定义流ID
  @discussion
  对端用户取消发布自定义媒体流
  
  @remarks 代理
  */
-- (void)remoteUserDidUnpublishCustomMediaStream:(NSString *)streamId;
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidUnpublishCustomMediaStream:(NSString *)streamId;
 
 /*!
- 本地发布资源上报
+ 对端用户发布默认音视频流, 成为正常用户
  
+ @param session 当前通话会话
+ @param userId 对端成为正常用户的ID
+ @discussion
+ 对端用户发布默认音视频流, 成为正常用户
+ 
+ @remarks 代理
+ */
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidUngrade:(NSString *)userId;
+
+/*!
+ 对端用户取消发布默认音视频流, 成为观察者用户
+ 
+ @param session 当前通话会话
+ @param userId 对端成为观察者用户的ID
+ @discussion
+ 对端用户取消发布默认音视频流, 成为观察者用户
+ 
+ @remarks 代理
+ */
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidDegrade:(NSString *)userId;
+
+/*!
+ 发布本地资源
+ 
+ @param session 当前通话会话
  @param success 发布资源是否成功
  @discussion
- 本地发布资源上报
+ 发布本地资源
  
  @remarks 代理
  */
-- (void)localUserDidPublishStream:(BOOL)success;
+- (void)callSession:(RCSCallSession *)session
+localUserDidPublishStream:(BOOL)success;
 
 /*!
- 主叫端发起呼叫后, 播放等待音
+ 取消发布本地资源
  
+ @param session 当前通话会话
+ @param success 取消发布资源是否成功
  @discussion
- 主叫端发起呼叫后, 播放等待音
+ 取消发布本地资源,
+ 仅在正常角色取消发布本地资源变为观察者后回调
  
  @remarks 代理
  */
-- (void)shouldAlertForWaitingRemoteResponse;
-
-/*!
- 被叫端收到来电后, 播放来电铃声
- 
- @discussion
- 被叫端收到来电后, 播放来电铃声
- 
- @remarks 代理
- */
-- (void)shouldRingForIncomingCall;
-
-/*!
- 通话接通或挂断时停止播放铃声
- 
- @discussion
- 通话接通或挂断时停止播放铃声
- 
- @remarks 代理
- */
-- (void)shouldStopAlertAndRing;
+- (void)callSession:(RCSCallSession *)session
+localUserDidUnpublishStream:(BOOL)success;
 
 /*!
  通话过程中的错误回调
  
+ @param session 当前通话会话
  @param error 错误码
  @discussion
  通话过程中的错误回调
@@ -213,48 +372,60 @@ NS_ASSUME_NONNULL_BEGIN
  
  @remarks 代理
  */
-- (void)errorDidOccur:(RCSCallStatusCode)error;
+- (void)callSession:(RCSCallSession *)session
+      errorDidOccur:(RCSCallStatusCode)error;
 
 /*!
  当前通话网络状态的回调，该回调方法每秒触发一次
  
+ @param session 当前通话会话
  @param txQuality 上行网络质量
- @param rxQuality 下行网络质量, 接收到的所有远端用户网络质量的平均值
+ @param rxQuality 下行网络质量, 接收到的所有对端用户网络质量的平均值
  @discussion
  当前通话网络状态的回调，该回调方法每秒触发一次
  
  @remarks 代理
  */
-- (void)networkTxQuality:(RCSCallQuality)txQuality rxQuality:(RCSCallQuality)rxQuality;
+- (void)callSession:(RCSCallSession *)session
+   networkTxQuality:(RCSCallQuality)txQuality
+          rxQuality:(RCSCallQuality)rxQuality;
 
 /*!
  当前通话网络状态的回调，该回调方法每秒触发一次
  
+ @param session 当前通话会话
  @param txQuality 上行网络质量
- @param rxQuality 下行网络质量, 接收到的某个远端用户的网络质量
- @param userId 远端用户
+ @param rxQuality 下行网络质量, 接收到的某个对端用户的网络质量
+ @param userId 对端用户
  @discussion
  当前通话网络状态的回调，该回调方法每秒触发一次
  
  @remarks 代理
  */
-- (void)networkTxQuality:(RCSCallQuality)txQuality rxQuality:(RCSCallQuality)rxQuality remoteUserID:(NSString *)userId;
+- (void)callSession:(RCSCallSession *)session
+   networkTxQuality:(RCSCallQuality)txQuality
+          rxQuality:(RCSCallQuality)rxQuality
+       remoteUserID:(NSString *)userId;
 
 /*!
  当前通话某用户声音音量回调，该回调方法每两秒触发一次
  
+ @param session 当前通话会话
  @param leavel 声音级别: 0 ~ 9, 0为无声, 依次变大
- @param userId 用户ID, 本端用户ID(发送音量) 或 远端用户ID(接收音量)
+ @param userId 用户ID, 本端用户ID(发送音量) 或 对端用户ID(接收音量)
  @discussion
  当前通话某用户声音音量回调，该回调方法每两秒触发一次
  
  @remarks 代理
  */
-- (void)audioLevel:(NSInteger)leavel userID:(NSString *)userId;
+- (void)callSession:(RCSCallSession *)session
+         audioLevel:(NSInteger)leavel
+             userID:(NSString *)userId;
 
 /*!
  本地发送视频数据上报
  
+ @param session 当前通话会话
  @param sampleBuffer 本地发送视频数据
  @discussion
  当前视频通话本地视频数据, 同步返回处理后的同一 sampleBuffer 对象
@@ -262,23 +433,27 @@ NS_ASSUME_NONNULL_BEGIN
  @remarks 代理
  @return 处理后的本地视频数据
  */
-- (CMSampleBufferRef)processVideoFrame:(CMSampleBufferRef)sampleBuffer;
+- (CMSampleBufferRef)callSession:(RCSCallSession *)session
+               processVideoFrame:(CMSampleBufferRef)sampleBuffer;
 
 /*!
- 当前通话为视频通话时, 收到远端用户的第一个视频帧的回调
- @param userId 远端用户ID
+ 当前通话为视频通话时, 收到对端用户的第一个视频帧的回调
+ 
+ @param session 当前通话会话
+ @param userId 对端用户ID
+ @remarks 代理
+ */
+- (void)callSession:(RCSCallSession *)session
+receiveRemoteUserVideoFirstKeyFrame:(NSString *)userId;
+
+/*!
+ 当前通话为音频或视频通话时, 收到对端用户的第一个音频帧的回调
+ @param userId 对端用户ID
  
  @remarks 代理
  */
-- (void)receiveRemoteUserVideoFirstKeyFrame:(NSString *)userId;
-
-/*!
- 当前通话为音频或视频通话时, 收到远端用户的第一个音频帧的回调
- @param userId 远端用户ID
- 
- @remarks 代理
- */
-- (void)receiveRemoteUserVideoFirstAudioFrame:(NSString *)userId;
+- (void)callSession:(RCSCallSession *)session
+receiveRemoteUserVideoFirstAudioFrame:(NSString *)userId;
 
 /*!
  对端用户视频分辨率变化的回调
@@ -290,7 +465,9 @@ NS_ASSUME_NONNULL_BEGIN
  
  @remarks 代理
  */
-- (void)remoteUserDidChangeResolution:(CGSize)size byUser:(NSString *)userId;
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidChangeResolution:(CGSize)size
+             byUser:(NSString *)userId;
 
 @end
 
@@ -303,7 +480,12 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  通话的会话类型
  */
-@property (nonatomic, assign, readonly) RCConversationType conversationType;
+@property (nonatomic, assign, readonly) RCSCallType callType;
+
+/*!
+ 密聊类型
+ */
+@property (nonatomic, assign, readonly) RCSCallSecretChatType secretChatType;
 
 /*!
  通话ID
@@ -377,6 +559,23 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) RCSCallDisconnectReason disconnectReason;
 
+/*!
+ 静音状态
+ */
+@property (nonatomic, readonly) BOOL isMuted;
+
+/*!
+ 扬声器状态，是否开启扬声器
+ 
+ @discussion 默认值为NO。
+ */
+@property (nonatomic, readonly) BOOL speakerEnabled;
+
+/*!
+ 摄像头状态，是否开启摄像头
+ */
+@property (nonatomic, readonly) BOOL cameraEnabled;
+
 #pragma mark - Init
 - (instancetype)initWithProfile:(RCSCallProfile *)profile;
 
@@ -416,15 +615,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - 待机时收到来电的处理
 /*!
- 待机时收到来电, 接听来电
+ 待机时, 收到来电呼叫后, 接听来电
  
- @param type 接听使用的媒体类型
  @discussion
- 待机时收到来电, 接听来电
+ 待机时, 收到来电呼叫后, 接听来电
  
  @remarks 通话管理
  */
-- (void)accept:(RCSCallMediaType)type;
+- (void)accept;
+
+/*!
+ 待机时, 收到来电呼叫后, 接听来电
+ 
+ @param completion 接听来电回调
+ @discussion
+ 待机时, 收到来电呼叫后, 接听来电
+ 
+ @remarks 通话管理
+ */
+- (void)accept:(void (^)(RCSCallStatusCode code))completion;
 
 /*!
  待机时收到来电, 挂断通话
@@ -445,86 +654,49 @@ NS_ASSUME_NONNULL_BEGIN
  
  @remarks 通话管理
  */
-- (void)hangup:(void (^)(BOOL isSuccess, NSInteger code))completion;
+- (void)hangup:(void (^)(RCSCallStatusCode code))completion;
 
-#pragma mark - 通话中收到另一来电的处理
+#pragma mark - 群用户主动加入通话
 /*!
- 通话中收到另一来电, 挂断另一来电
+ 群用户退出群通话后, 再次直接加入该群通话
  
- @param incomingCallId 另一来电ID
  @discussion
- 通话中收到另一来电, 挂断另一来电
+ 群用户退出群通话后, 再次直接加入该群通话,
+ 如果该通话已结束则无法加入
  
  @remarks 通话管理
  */
-- (void)hangupIncoming:(NSString *)incomingCallId;
-
-/*!
- 通话中收到另一来电, 挂断正在进行的通话, 接听另一来电
- 
- @param currentCallId 正在进行的通话ID
- @param incomingCallId 另一来电ID
- @discussion
- 通话中收到另一来电, 挂断正在进行的通话, 接听另一来电
- 
- @remarks 通话管理
- */
-- (void)hangupCurrent:(NSString *)currentCallId acceptIncoming:(NSString *)incomingCallId;
-
-/*!
- 通话中收到另一来电, 保持正在进行的通话, 接听另一来电
- 
- @param currentCallId 正在进行的通话ID
- @param incomingCallId 另一来电ID
- @discussion
- 通话中收到另一来电, 保持正在进行的通话, 接听另一来电
- 
- @remarks 通话管理
- */
-- (void)holdCurrent:(NSString *)currentCallId acceptIncoming:(NSString *)incomingCallId;
-
-#pragma mark - 另一个通话结束后处理
-/*!
- 接听的另一来电结束后, 重新接听之前保持的通话
- 
- @param holdingCallId 之前保持的通话ID
- @discussion
- 接听的另一来电结束后, 重新接听之前保持的通话
- 
- @remarks 通话管理
- */
-- (void)acceptHolding:(NSString *)holdingCallId;
-
-#pragma mark - 群用户加入通话
-/*!
- 群用户直接加入已经存在的通话
- 
- @param callId 已经存在的通话ID
- @discussion
- 群用户直接加入已经存在的通话
- 
- @remarks 通话管理
- */
-- (void)joinCall:(NSString *)callId;
+- (void)joinCall;
 
 #pragma mark - 通话中邀请新用户
 /*!
  通话建立之后, 再邀请新用户加入通话
  @param userIdList 用户ID列表
- @param type 建议被邀请者使用的媒体类型
  @discussion
  邀请用户加入通话
  
  @remarks 通话管理
  */
-- (void)inviteRemoteUsers:(NSArray *)userIdList mediaType:(RCSCallMediaType)type;
+- (void)inviteRemoteUsers:(NSArray *)userIdList;
 
 /*!
+ 通话建立之后, 再邀请新用户加入通话
+ @param userIdList 用户ID列表
+ @param targetId 目标会话ID, 单人呼叫时targetId为被叫端UserId, 多人呼叫时targetId为群组Id, 请不要填写主叫端UserId, 否则无法发起呼叫
+ @discussion
  邀请用户加入通话
+ 
+ @remarks 通话管理
+ */
+- (void)inviteRemoteUsers:(NSArray *)userIdList
+                 targetId:(NSString *)targetId;
+
+/*!
+ 通话建立之后, 再邀请新用户加入通话
  
  @param userIdList 用户ID列表
  @param observerIdList 需要以观察者身份加入房间的用户ID列表
- @param type 建议被邀请者使用的媒体类型
+ @param targetId 目标会话ID, 单人呼叫时targetId为被叫端UserId, 多人呼叫时targetId为群组Id, 请不要填写主叫端UserId, 否则无法发起呼叫
  @discussion
  邀请用户加入通话
  
@@ -532,7 +704,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)inviteRemoteUsers:(NSArray *)userIdList
            observerIdList:(NSArray *)observerIdList
-                mediaType:(RCSCallMediaType)type;
+                 targetId:(NSString *)targetId;
 
 #pragma mark - 设置视频View
 /*!
@@ -557,24 +729,72 @@ NS_ASSUME_NONNULL_BEGIN
  
  @remarks 视频配置
  */
-- (void)setVideoView:(UIView *)view userId:(NSString *)userId renderMode:(RCSCallRenderMode)renderMode;
+- (void)setVideoView:(UIView *)view
+              userId:(NSString *)userId
+          renderMode:(RCSCallRenderMode)renderMode;
+
+#pragma mark - 变更通话类型
+/*!
+ 仅供一对一通话使用,
+ 向对方请求变更当前通话媒体类型
+ @param mediaType 媒体类型
+ @discussion
+ 向对方请求变更当前通话媒体类型
+ 
+ 音频转视频:
+ 在收到同意的  回调后, 调用 changeMediaType: 方法切换为视频类型,
+ 否则不调用 changeMediaType: 方法切换媒体类型.
+ 
+ 视频转音频:
+ 在 requestChangeMediaType:completion: 方法的 completion 中,
+ 如果 succ 为 YES, 则调用 changeMediaType: 方法切换为音频类型
+ 如果 succ 为 NO, 则不调用 changeMediaType:
+ 
+ @remarks 通话管理
+ */
+- (void)requestChangeMediaType:(RCSCallMediaType)mediaType
+                    completion:(void(^)(BOOL succ))completion;
 
 /*!
+ 取消之前发起的音频到视频通话的媒体类型变更
+ @param mediaType 媒体类型
+ @discussion
+ 取消之前发起的音频到视频通话的媒体类型变更
+ 
+ @remarks 通话管理
+ */
+- (void)cancelRequestChangeMediaType:(RCSCallMediaType)mediaType
+                          completion:(void(^)(BOOL succ))completion;
+
+/*!
+ 仅供一对一通话使用,
+ 收到对方请求变更当前通话由音频转为视频时, 回应对方的请求
+ @param mediaType 媒体类型
+ @discussion
+ 收到对方请求变更当前通话由音频转为视频时, 回应对方的请求,
+ 只有在音频变更为视频时需要使用此方法回应对方,
+ 当回应为 YES 后, SDK 内部会将当前通话切换为视频,
+ 不需要自行调用 changeMediaType: 方法切换媒体类型
+ 
+ @remarks 通话管理
+ */
+- (void)answerChangeMediaType:(RCSCallMediaType)mediaType
+                       accept:(BOOL)accept
+                   completion:(void(^)(BOOL succ))completion;
+
+/*!
+ 仅供一对一通话使用,
  更换自己使用的媒体类型
- @param type 媒体类型
+ 对方同意由音频变更为视频通话后, 调用此方法进行本地变更
+ @param mediaType 媒体类型
  @discussion
  更换自己使用的媒体类型
  
  @remarks 通话管理
  */
-- (BOOL)changeMediaType:(RCSCallMediaType)type;
+- (void)changeMediaType:(RCSCallMediaType)mediaType;
 
-#pragma mark - Device
-/*!
- 静音状态
- */
-@property (nonatomic, readonly) BOOL isMuted;
-
+#pragma mark - 麦克风/摄像头
 /*!
  设置静音状态
  
@@ -588,13 +808,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)setMuted:(BOOL)muted;
 
 /*!
- 扬声器状态，是否开启扬声器
- 
- @discussion 默认值为NO。
- */
-@property (nonatomic, readonly) BOOL speakerEnabled;
-
-/*!
  设置扬声器状态
  
  @param speakerEnabled  是否开启扬声器
@@ -605,11 +818,6 @@ NS_ASSUME_NONNULL_BEGIN
  @return 是否设置成功
  */
 - (BOOL)setSpeakerEnabled:(BOOL)speakerEnabled;
-
-/*!
- 摄像头状态，是否开启摄像头
- */
-@property (nonatomic, readonly) BOOL cameraEnabled;
 
 /*!
  设置摄像头状态
@@ -635,35 +843,56 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - 观察者发布资源
 /*!
- 观察者身份用户, 发布自己的音视频资源
+ 通话过程中, 观察者身份用户, 发布自己的音视频资源
  
- @param mediaType 发布的媒体类型
- @param block 发布完成的回调
  @discussion
- 观察者身份用户, 发布自己的音视频资源
+ 通话过程中, 观察者身份用户, 发布自己的音视频资源,
+ 发布结束会收到 callSession:localUserDidPublishStream: 代理回调
  
  @warning
  只有观察者用户可以发布音视频资源
  
  @remarks 资源管理
  */
-- (void)publishMediaResource:(RCSCallMediaType)mediaType
-                    complete:(void (^)(BOOL isSuccess, NSInteger code))block;
+- (void)publishMediaResource;
 
-#pragma mark - 正常用户取消发布资源
+#pragma mark - 正常用户取消发布音视频资源
 /*!
- 正常身份用户, 取消发布自己的音视频资源
+ 通话过程中, 正常身份用户, 取消发布自己的音视频资源
  
- @param block  取消发布完成的回调
  @discussion
- 正常身份用户, 取消发布自己的音视频资源
+ 通话过程中, 正常身份用户, 取消发布自己的音视频资源
  
  @warning
  只有正常用户可以取消发布音视频资源
  
  @remarks 资源管理
  */
-- (void)unPublishMediaResource:(void (^)(BOOL isSuccess, NSInteger code))block;
+- (void)unpublishMediaResource;
+
+#pragma mark - 订阅远端用户发布的指定音视频资源
+/*!
+ 通话过程中, 任何身份用户, 订阅远端用户发布的指定音视频资源,
+ 此功能仅在 autoSubscribe 为 NO 时生效
+ 
+ @discussion
+ 通话过程中, 任何身份用户, 订阅远端用户发布的指定音视频资源
+ 
+ @remarks 资源管理
+ */
+- (void)subscribeRemoteUserStreams:(NSArray *)streamIdList;
+
+#pragma mark - 取消订阅远端用户发布的指定音视频资源
+/*!
+ 通话过程中, 任何身份用户, 取消订阅远端用户发布的指定音视频资源,
+ 此功能仅在 autoSubscribe 为 NO 时生效
+ 
+ @discussion
+ 通话过程中, 任何身份用户, 取消订阅远端用户发布的指定音视频资源
+ 
+ @remarks 资源管理
+ */
+- (void)unsubscribeRemoteUserStreams:(NSArray *)streamIdList;
 
 @end
 

@@ -19,7 +19,7 @@ FOUNDATION_EXPORT const unsigned char RongCallCenterLibVersionString[];
 #import <RongCallCenterLib/RCSCallManager.h>
 #import <RongCallCenterLib/RCSCallProfile.h>
 #import <RongCallCenterLib/RCSCallSession.h>
-#import <RongCallCenterLib/RCSCallProfile.h>
+#import <RongCallCenterLib/RCSCallSignalGetUserCallStatusListModel.h>
+#import <RongCallCenterLib/RCSCallSignalSyncCallLog.h>
 #import <RongCallCenterLib/RCSCallSummaryMessage.h>
-#import <RongCallCenterLib/RCSCallUserProfile.h>
 #import <RongCallCenterLib/RCSCallUserProfile.h>

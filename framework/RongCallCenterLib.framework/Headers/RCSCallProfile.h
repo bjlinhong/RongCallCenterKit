@@ -17,7 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *callId;
 @property (nonatomic, strong) NSString *userName;
-@property (nonatomic, assign) RCConversationType conversationType;
+@property (nonatomic, assign) RCSCallSecretChatType secretChatType;
+@property (nonatomic, assign) RCSCallType callType;
 @property (nonatomic, strong) NSString *targetId;
 @property (nonatomic, weak) RCSCallSession *callSession;
 @property (nonatomic, strong) NSString *sessionId;
@@ -32,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 // RCSCallUserProfile List (not include self)
 @property (nonatomic, strong) NSMutableArray *memberProfileList;
 @property (nonatomic, strong) NSMutableArray *unkownMediaIdList;
+@property (nonatomic, strong) NSMutableArray *observerIdList;
 
 // self info
 @property (nonatomic, strong) RCSCallUserProfile *myProfile;
@@ -43,13 +45,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 - (instancetype)initWithCallId:(NSString *)callId
-              conversationType:(RCConversationType)conversationType
+                      callType:(RCSCallType)callType
+                secretChatType:(RCSCallSecretChatType)secretChatType
                       targetId:(NSString *_Nullable)targetId
                         caller:(NSString *)caller
                        inviter:(NSString *)inviter
                      myProfile:(RCSCallUserProfile *)myProfile
                useSignalServer:(BOOL)useSignalServer
-                observerIdList:(NSMutableArray *_Nullable)observerIdList
                          extra:(NSString *_Nullable)extra;
 
 - (void)addDelegate:(id<RCSCallSessionDelegate>)delegate;
