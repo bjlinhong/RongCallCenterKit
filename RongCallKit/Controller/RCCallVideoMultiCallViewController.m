@@ -630,8 +630,7 @@
  @param mediaType 希望被邀请者选择的媒体类型
  */
 - (void)callSession:(RCSCallSession *)session
-remoteUserDidInvite:(NSString *)userId
-          mediaType:(RCSCallMediaType)mediaType {
+remoteUserDidInvite:(NSString *)userId {
     RCCallUserCallInfoModel *model = [self generateUserModel:userId];
     [self addSubUserModel:model];
 

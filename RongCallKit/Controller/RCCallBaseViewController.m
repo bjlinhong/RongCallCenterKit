@@ -1696,8 +1696,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
  @param mediaType 希望被邀请者选择的媒体类型
  */
 - (void)callSession:(RCSCallSession *)session
-remoteUserDidInvite:(NSString *)userId
-          mediaType:(RCSCallMediaType)mediaType {
+remoteUserDidInvite:(NSString *)userId {
     [self resetLayout:self.callSession.isMultiCall
             mediaType:self.callSession.mediaType
            callStatus:self.callSession.callStatus];
