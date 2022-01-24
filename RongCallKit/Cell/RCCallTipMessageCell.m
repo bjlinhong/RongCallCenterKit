@@ -84,8 +84,7 @@
                    dataDetectorEnabled:NO];
         }
 
-        if (message.hangupReason == RCSCallDisconnectReasonMediaServerClosed ||
-            message.hangupReason == RCSCallDisconnectReasonRemoteEngineUnsupported) {
+        if (message.hangupReason == RCSCallDisconnectReasonMediaServerClosed) {
             [self.messageLabel setText:RCCallKitLocalizedString(@"VoIPCallMediaServerClosed")];
         }
     }

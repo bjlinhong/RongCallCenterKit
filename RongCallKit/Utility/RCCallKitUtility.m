@@ -82,15 +82,15 @@ UIColor *dynamic_color(NSInteger light_hex_value, NSInteger dark_hex_value) {
         case RCSCallDisconnectReasonNoResponse:
             hangupReasonString = RCCallKitLocalizedString(@"VoIPCallNoResponse");
             break;
-        case RCSCallDisconnectReasonEngineUnsupported:
-            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallEngineUnsupport");
-            break;
-        case RCSCallDisconnectReasonNetworkError:
+//        case RCSCallDisconnectReasonEngineUnsupported:
+//            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallEngineUnsupport");
+//            break;
+        case RCSCallDisconnectReasonConnectionError:
             hangupReasonString = RCCallKitLocalizedString(@"VoIPCallLocalNetworkError");
             break;
-        case RCSCallDisconnectReasonResourceError:
-            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallLocalResourceError");
-            break;
+//        case RCSCallDisconnectReasonResourceError:
+//            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallLocalResourceError");
+//            break;
         case RCSCallDisconnectReasonPublishError:
             hangupReasonString = RCCallKitLocalizedString(@"VoIPCallLocalPublishError");
             break;
@@ -112,43 +112,43 @@ UIColor *dynamic_color(NSInteger light_hex_value, NSInteger dark_hex_value) {
         case RCSCallDisconnectReasonRemoteNoResponse:
             hangupReasonString = RCCallKitLocalizedString(@"VoIPCallRemoteNoResponse");
             break;
-        case RCSCallDisconnectReasonRemoteEngineUnsupported:
-            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallRemoteEngineUnsupport");
-            break;
-        case RCSCallDisconnectReasonRemoteNetworkError:
-            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallRemoteNetworkError");
-            break;
-        case RCSCallDisconnectReasonRemoteResourceError:
-            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallRemoteResourceError");
-            break;
+//        case RCSCallDisconnectReasonRemoteEngineUnsupported:
+//            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallRemoteEngineUnsupport");
+//            break;
+//        case RCSCallDisconnectReasonRemoteNetworkError:
+//            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallRemoteNetworkError");
+//            break;
+//        case RCSCallDisconnectReasonRemoteResourceError:
+//            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallRemoteResourceError");
+//            break;
         case RCSCallDisconnectReasonRemotePublishError:
             hangupReasonString = RCCallKitLocalizedString(@"VoIPCallRemotePublishError");
             break;
         case RCSCallDisconnectReasonRemoteSubscribeError:
             hangupReasonString = RCCallKitLocalizedString(@"VoIPCallRemoteSubscribeError");
             break;
-        case RCSCallDisconnectReasonKickedByOtherCall:
+        case RCSCallDisconnectReasonOtherJoinedRTC:
             hangupReasonString = RCCallKitLocalizedString(@"VoIPCallLocalKickedByOtherCallError");
             break;
-        case RCSCallDisconnectReasonInOtherCall:
-            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallLocalInOtherCallError");
-            break;
+//        case RCSCallDisconnectReasonInOtherCall:
+//            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallLocalInOtherCallError");
+//            break;
         case RCSCallDisconnectReasonKickedByServer:
             hangupReasonString = RCCallKitLocalizedString(@"VoIPCallLocalKickedByServer");
             break;
-        case RCSCallDisconnectReasonAcceptSystemCall:
+        case RCSCallDisconnectReasonAcceptCarrier:
             hangupReasonString = RCCallKitLocalizedString(@"VoIPCallLocalAcceptSystemCall");
             break;
-        case RCSCallDisconnectReasonRemoteKickedByOtherCall:
+        case RCSCallDisconnectReasonRemoteOtherJoinedRTC:
             hangupReasonString = RCCallKitLocalizedString(@"VoIPCallRemoteKickedByOtherCallError");
             break;
-        case RCSCallDisconnectReasonRemoteInOtherCall:
-            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallRemoteInOtherCallError");
-            break;
+//        case RCSCallDisconnectReasonRemoteInOtherCall:
+//            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallRemoteInOtherCallError");
+//            break;
         case RCSCallDisconnectReasonRemoteKickedByServer:
             hangupReasonString = RCCallKitLocalizedString(@"VoIPCallRemoteKickedByServer");
             break;
-        case RCSCallDisconnectReasonRemoteAcceptSystemCall:
+        case RCSCallDisconnectReasonRemoteAcceptCarrier:
             hangupReasonString = RCCallKitLocalizedString(@"VoIPCallRemoteAcceptSystemCall");
             break;
         case RCSCallDisconnectReasonAcceptByOtherClient:
@@ -157,7 +157,7 @@ UIColor *dynamic_color(NSInteger light_hex_value, NSInteger dark_hex_value) {
         case RCSCallDisconnectReasonHangupByOtherClient:
             hangupReasonString = RCCallKitLocalizedString(@"VoIPCallHangupByOtherClient");
             break;
-        case RCSCallDisconnectReasonAddToBlackList:
+        case RCSCallDisconnectReasonBlackList:
             hangupReasonString = RCCallKitLocalizedString(@"VoIP_Rejected_By_Blacklist");
             break;
         case RCSCallDisconnectReasonMediaServerClosed:
