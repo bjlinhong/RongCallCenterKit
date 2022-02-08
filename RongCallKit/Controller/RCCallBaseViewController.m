@@ -450,7 +450,8 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
 
 - (void)updateActiveTimer {
     if (hangupButtonClick) return;
-    long sec = ([[NSDate date] timeIntervalSince1970] * 1000 - self.callSession.connectedTime) / 1000;
+//    long sec = ([[NSDate date] timeIntervalSince1970] * 1000 - self.callSession.connectedTime) / 1000;
+    long sec = ([[NSDate date] timeIntervalSince1970] * 1000 - self.callSession.serverConnectedTime) / 1000;
     self.timeLabel.text = [RCCallKitUtility getReadableStringForTime:sec];
 
     if (sec >= 3600 && self.timeLabel.frame.size.width != 80) {
