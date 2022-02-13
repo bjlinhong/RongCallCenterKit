@@ -1784,7 +1784,7 @@ remoteUserDidChangeMediaType:(NSString *)userId
  */
 - (void)callSession:(RCSCallSession *)session
 shouldAlertForWaitingRemoteResponse:(NSString *)callId {
-    //    [self checkApplicationStateAndAlert];
+    [self checkApplicationStateAndAlert];
 }
 
 /*!

@@ -419,7 +419,7 @@ typedef NS_ENUM(NSUInteger, RCSCallStatusCode) {
     /*!
      已被禁止通话
      */
-    RCSCallMediaKickedByServerError = 11,
+    RCSCallStatusCodeMediaKickedByServerError = 11,
     /*!
      音视频服务已关闭
      */
