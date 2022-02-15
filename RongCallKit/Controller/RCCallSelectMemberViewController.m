@@ -56,11 +56,8 @@ typedef void (^CompleteBlock)(NSArray *addUserIdList);
                                                                        }];
             }
         } else {
-//            self.listingUserIdList = [NSMutableArray arrayWithArray:existUserIdList];
-//            13333333333_C6EA_user3
-            
             NSMutableArray *tmpUserIdArray = [NSMutableArray arrayWithArray:existUserIdList];
-            [tmpUserIdArray addObject:@"13333333333_C6EA_user3"];
+            [tmpUserIdArray addObject:@"13333333333_LVBU_user3"];
             self.listingUserIdList = tmpUserIdArray;
         }
         self.existUserIdList = existUserIdList;
