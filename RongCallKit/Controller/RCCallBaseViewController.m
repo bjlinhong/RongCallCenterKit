@@ -1677,6 +1677,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
         [[RCCall sharedRCCall] stopReceiveCallVibrate];
     });
     [self removeProximityMonitoringObserver];
+    _callSession = nil;
 }
 
 /*!
