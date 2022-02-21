@@ -118,6 +118,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
                                                   secretChatType:secretChatType
                                                         targetId:targetId
                                                               to:userIdList
+//                                                  observerIdList:@[@"13222222222_LVBU_user2"]
                                                        mediaType:mediaType
                                                  sessionDelegate:self
                                                            extra:nil];
