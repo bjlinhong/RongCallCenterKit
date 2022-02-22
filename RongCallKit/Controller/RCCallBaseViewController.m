@@ -869,9 +869,8 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
 - (void)cameraSwitchButtonClicked {
     [self didTapCameraSwitchButton];
 
-    if ([self.callSession switchCameraMode]) {
-        _backCamera = !_backCamera;
-    }
+    [self.callSession switchCameraMode];
+    _backCamera = !_backCamera;
     //[_cameraSwitchButton setSelected:_backCamera];
 }
 
