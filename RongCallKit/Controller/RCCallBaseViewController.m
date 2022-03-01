@@ -115,11 +115,9 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
         [[RCSCallManager sharedManager] setHangupPushConfig:hangupPushConfig];
 
         _callSession = [[RCSCallManager sharedManager] startCall:callType
-                                                  secretChatType:secretChatType
-                                                        targetId:targetId
+                                                       mediaType:mediaType
                                                               to:userIdList
 //                                                  observerIdList:@[@"13222222222_LVBU_user2"]
-                                                       mediaType:mediaType
                                                  sessionDelegate:self
                                                            extra:nil];
         

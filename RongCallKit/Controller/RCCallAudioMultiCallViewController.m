@@ -365,7 +365,18 @@
                 mediaType:self.mediaType
                    baseOn:self
              selectResult:^(NSArray<NSString *> *userIdList) {
-            [weakSelf.callSession inviteRemoteUsers:userIdList completion:nil];
+//            [weakSelf.callSession inviteRemoteUsers:userIdList completion:nil];
+            NSMutableArray *array = [NSMutableArray array];
+            for (NSString *userId in userIdList) {
+                RCSCallToUser *user = [[RCSCallToUser alloc] init];
+                user.userId = userId;
+                user.targetType = 1;
+                user.targetId = self.targetId;
+                user.userType = RCSCallUserTypeNormal;
+                [array addObject:user];
+            }
+            
+            [weakSelf.callSession inviteNewUsers:array completion:nil];
              }];
     } else {
         RCCallSelectMemberViewController *selectViewController = [[RCCallSelectMemberViewController alloc]
@@ -374,7 +385,18 @@
                            mediaType:self.mediaType
                                exist:[existUserIdList copy]
                              success:^(NSArray *addUserIdList) {
-            [weakSelf.callSession inviteRemoteUsers:addUserIdList completion:nil];
+//            [weakSelf.callSession inviteRemoteUsers:addUserIdList completion:nil];
+            NSMutableArray *array = [NSMutableArray array];
+            for (NSString *userId in addUserIdList) {
+                RCSCallToUser *user = [[RCSCallToUser alloc] init];
+                user.userId = userId;
+                user.targetType = 1;
+                user.targetId = self.targetId;
+                user.userType = RCSCallUserTypeNormal;
+                [array addObject:user];
+            }
+            
+            [weakSelf.callSession inviteNewUsers:array completion:nil];
                              }];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:selectViewController];
         nav.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -398,7 +420,18 @@
                        mediaType:self.mediaType
                            exist:existUserIdList
                          success:^(NSArray *addUserIdList) {
-        [weakSelf.callSession inviteRemoteUsers:addUserIdList completion:nil];
+//        [weakSelf.callSession inviteRemoteUsers:addUserIdList completion:nil];
+        NSMutableArray *array = [NSMutableArray array];
+        for (NSString *userId in addUserIdList) {
+            RCSCallToUser *user = [[RCSCallToUser alloc] init];
+            user.userId = userId;
+            user.targetType = 1;
+            user.targetId = self.targetId;
+            user.userType = RCSCallUserTypeNormal;
+            [array addObject:user];
+        }
+        
+        [weakSelf.callSession inviteNewUsers:array completion:nil];
                          }];
     UINavigationController *rootVC = [[UINavigationController alloc] initWithRootViewController:selectViewController];
     rootVC.modalPresentationStyle = UIModalPresentationFullScreen;
