@@ -419,8 +419,7 @@
                 [array addObject:user];
             }
             
-            [weakSelf.callSession inviteNewUsers:array completion:nil];
-            
+            [weakSelf.callSession inviteRemoteUsers:array completion:nil];
         }];
     } else {
         RCCallSelectMemberViewController *selectViewController = [[RCCallSelectMemberViewController alloc]
@@ -442,7 +441,7 @@
                 [array addObject:user];
             }
             
-            [weakSelf.callSession inviteNewUsers:array completion:nil];
+            [weakSelf.callSession inviteRemoteUsers:array completion:nil];
                              }];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:selectViewController];
         nav.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -478,7 +477,7 @@
             [array addObject:user];
         }
         
-        [weakSelf.callSession inviteNewUsers:array completion:nil];
+        [weakSelf.callSession inviteRemoteUsers:array completion:nil];
         
     }];
     UINavigationController *rootVC = [[UINavigationController alloc] initWithRootViewController:selectViewController];
