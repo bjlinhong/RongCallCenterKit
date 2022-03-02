@@ -203,7 +203,7 @@
     if ([self.currentUUID.UUIDString isEqualToString:action.callUUID.UUIDString]) {
         if ([RCCall sharedRCCall].currentCallSession) {
             self.acceptedFromCallKit = YES;
-            [[RCCall sharedRCCall].currentCallSession accept:[RCCall sharedRCCall].currentCallSession.mediaType];
+            [[RCCall sharedRCCall].currentCallSession accept];
         } else {
             // wait a moment for a session creation;
             self.connecting = YES;
@@ -217,7 +217,7 @@
 - (void)didCreateNewSession:(NSNotification *)notification {
     RCSCallSession *session = notification.object;
     if (self.connecting) {
-        [[RCCall sharedRCCall].currentCallSession accept:[RCCall sharedRCCall].currentCallSession.mediaType];
+        [[RCCall sharedRCCall].currentCallSession accept];
     }
     self.connecting = NO;
 }
