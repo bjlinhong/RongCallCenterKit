@@ -448,9 +448,14 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
 }
 
 - (void)updateActiveTimer {
-    if (hangupButtonClick) return;
-//    long sec = ([[NSDate date] timeIntervalSince1970] * 1000 - self.callSession.connectedTime) / 1000;
-    long sec = ([[NSDate date] timeIntervalSince1970] * 1000 - self.callSession.serverConnectedTime) / 1000;
+    if (hangupButtonClick || !self.callSession.serverConnectedTime) {
+        return;
+    }
+    
+    long long now = [[NSDate date] timeIntervalSince1970] * 1000;
+    NSLog(@"updateActiveTimer now:%lld  serverConnectedTime:%lld", now, self.callSession.serverConnectedTime);
+    
+    long sec = (now - self.callSession.serverConnectedTime) / 1000;
     self.timeLabel.text = [RCCallKitUtility getReadableStringForTime:sec];
 
     if (sec >= 3600 && self.timeLabel.frame.size.width != 80) {
@@ -1899,7 +1904,7 @@ shouldStopAlertAndRing:(NSString *)callId {
 receiveRemoteUserVideoFirstKeyFrame:(NSString *)userId {
     self.tipsLabel.text = @"";
     self.receivedFirstKeyFrame = YES;
-    [self startActiveTimer];
+//    [self startActiveTimer];
 }
 
 
@@ -1907,6 +1912,10 @@ receiveRemoteUserVideoFirstKeyFrame:(NSString *)userId {
 receiveRemoteUserVideoFirstAudioFrame:(NSString *)userId {
     self.tipsLabel.text = @"";
     self.receivedFirstKeyFrame = YES;
+//    [self startActiveTimer];
+}
+
+- (void)callSession:(RCSCallSession *)session mediaConnectReady:(NSString *)callId {
     [self startActiveTimer];
 }
 
