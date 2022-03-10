@@ -340,6 +340,9 @@
                            RCCallNameLabelWidth, RCCallMiniLabelHeight);
             self.remoteNameLabel.hidden = NO;
             self.remoteNameLabel.textAlignment = NSTextAlignmentCenter;
+            
+            [self.callSession setVideoView:self.remotePortraitBgView userId:[RCIMClient sharedRCIMClient].currentUserInfo.userId];
+            
         } else {
             self.remotePortraitBgView.hidden = YES;
         }
