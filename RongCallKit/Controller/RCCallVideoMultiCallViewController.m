@@ -704,6 +704,11 @@ remoteUserDidInvite:(NSString *)userId {
     }
 }
 
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidMicrophoneMute:(BOOL)mute
+             byUser:(NSString *)userId {
+}
+
 /*!
  对端用户关闭/打开了摄像头
 

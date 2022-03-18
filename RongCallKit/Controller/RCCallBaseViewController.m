@@ -1757,13 +1757,20 @@ remoteUserDidChangeMediaType:(NSString *)userId
     });
 }
 
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidMicrophoneMute:(BOOL)mute
+             byUser:(NSString *)userId {
+}
+
 /*!
  对端用户关闭/打开了摄像头
 
  @param userId    用户ID
  @param muted     是否关闭camera
  */
-- (void)callSession:(RCSCallSession *)session remoteUserDidCameraEnable:(BOOL)muted byUser:(NSString *)userId {
+- (void)callSession:(RCSCallSession *)session
+remoteUserDidCameraEnable:(BOOL)enable
+             byUser:(NSString *)userId {
     [self resetLayout:self.callSession.isMultiCall
             mediaType:self.callSession.mediaType
            callStatus:self.callSession.callStatus];
