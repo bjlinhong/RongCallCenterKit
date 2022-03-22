@@ -759,7 +759,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
 //    }
     
     [self.callSession requestChangeMediaType:RCSCallMediaTypeVideo
-                                  completion:^(BOOL succ) {
+                                  completion:^(RCSCallStatusCode code) {
         NSLog(@"LLH...... ");
     }];
 }
@@ -822,7 +822,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
         
         
         [self.callSession requestChangeMediaType:RCSCallMediaTypeVideo
-                                      completion:^(BOOL succ) {
+                                      completion:^(RCSCallStatusCode code) {
             NSLog(@"LLH...... ");
         }];
         
@@ -1727,10 +1727,9 @@ remoteUserDidRequest:(NSString *)userId
          actionType:(RCSCallChangeActionType)actionType {
     NSLog(@"LLH...... ");
     
-    [session answerChangeMediaType:mediaType accept:YES completion:^(BOOL succ) {
+    [session answerChangeMediaType:mediaType accept:YES completion:^(RCSCallStatusCode code) {
         NSLog(@"LLH...... ");
     }];
-    
 }
 
 /*!
@@ -1924,6 +1923,10 @@ receiveRemoteUserVideoFirstAudioFrame:(NSString *)userId {
 
 - (void)callSession:(RCSCallSession *)session mediaConnectReady:(NSString *)callId {
     [self startActiveTimer];
+}
+
+- (void)callSession:(RCSCallSession *)session callDidTerminamteFromServer:(RCSCallSignalCallLogModel *)model {
+    NSLog(@"");
 }
 
 - (void)setSpeakerEnable:(BOOL)enable {
