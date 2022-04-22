@@ -228,19 +228,24 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
         if (self.audioPlayer) {
             [self stopPlayRing];
         }
+        
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        
         if (self.callSession.callStatus == RCSCallStatusInviting) {
-            [audioSession
-                setCategory:AVAudioSessionCategoryPlayAndRecord
-                withOptions:AVAudioSessionCategoryOptionAllowBluetooth | AVAudioSessionCategoryOptionAllowBluetoothA2DP
-                      error:nil];
+            [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord
+                          withOptions:AVAudioSessionCategoryOptionAllowBluetooth |
+             AVAudioSessionCategoryOptionAllowBluetoothA2DP |
+             AVAudioSessionCategoryOptionDefaultToSpeaker
+                                error:nil];
+            [audioSession setMode:AVAudioSessionModeVoiceChat
+                            error:nil];
         } else {
             //默认情况按静音或者锁屏键会静音
             [audioSession setCategory:AVAudioSessionCategorySoloAmbient error:nil];
             [self triggerVibrate];
         }
         [audioSession setActive:YES error:nil];
-
+        
         NSURL *url = [NSURL fileURLWithPath:ringPath];
         NSError *error = nil;
         self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
