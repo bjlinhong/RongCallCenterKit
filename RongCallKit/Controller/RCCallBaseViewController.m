@@ -232,12 +232,11 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         
         if (self.callSession.callStatus == RCSCallStatusInviting) {
-            [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord
+            [audioSession setCategory:AVAudioSessionCategoryPlayback
                           withOptions:AVAudioSessionCategoryOptionAllowBluetooth |
-             AVAudioSessionCategoryOptionAllowBluetoothA2DP |
-             AVAudioSessionCategoryOptionDefaultToSpeaker
+             AVAudioSessionCategoryOptionAllowBluetoothA2DP
                                 error:nil];
-            [audioSession setMode:AVAudioSessionModeVoiceChat
+            [audioSession setMode:AVAudioSessionModeDefault
                             error:nil];
         } else {
             //默认情况按静音或者锁屏键会静音
