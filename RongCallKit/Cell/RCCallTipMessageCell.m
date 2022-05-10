@@ -70,6 +70,10 @@
             status = RCCallKitLocalizedString(@"VoIPCallAcceptByOtherClient");
         } else if (message.hangupReason == RCSCallDisconnectReasonRemoteBusyLine) {
             status = RCCallKitLocalizedString(@"VoIPCallRemoteBusyLine");
+        } else if (message.hangupReason == RCSCallDisconnectReasonAcceptError) {
+            status = RCCallKitLocalizedString(@"VoIPCallAcceptError");
+        } else if (message.hangupReason == RCSCallDisconnectReasonRemoteAcceptError) {
+            status = RCCallKitLocalizedString(@"VoIPCallRemoteAcceptError");
         } else {
             status = RCCallKitLocalizedString(@"VoIPCallNoResponse");
         }
