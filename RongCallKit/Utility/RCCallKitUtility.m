@@ -163,12 +163,6 @@ UIColor *dynamic_color(NSInteger light_hex_value, NSInteger dark_hex_value) {
         case RCSCallDisconnectReasonMediaServerClosed:
             hangupReasonString = RCCallKitLocalizedString(@"VoIPCallMediaServerClosed");
             break;
-        case RCSCallDisconnectReasonAcceptError:
-            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallAcceptError");
-            break;
-        case RCSCallDisconnectReasonRemoteAcceptError:
-            hangupReasonString = RCCallKitLocalizedString(@"VoIPCallRemoteAcceptError");
-            break;
         default:
             break;
     }
