@@ -457,7 +457,7 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
     }
     
     long long now = [[NSDate date] timeIntervalSince1970] * 1000;
-    NSLog(@"updateActiveTimer now:%lld  serverConnectedTime:%lld", now, self.callSession.serverConnectedTime);
+    //NSLog(@"updateActiveTimer now:%lld  serverConnectedTime:%lld", now, self.callSession.serverConnectedTime);
     
     long sec = (now - self.callSession.serverConnectedTime) / 1000;
     self.timeLabel.text = [RCCallKitUtility getReadableStringForTime:sec];
