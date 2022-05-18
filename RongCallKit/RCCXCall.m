@@ -63,7 +63,8 @@
 }
 
 - (void)startCallId:(NSString *)callId userId:(NSString *)userId {
-    NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:callId];
+//    NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:callId];
+    NSUUID *uuid = [NSUUID UUID];
     self.currentUUID = uuid;
 //RCCallKit_Delete_Start
 #if PUBLIC
@@ -116,7 +117,8 @@
         return;
     }
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-    NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:callId];
+//    NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:callId];
+    NSUUID *uuid = [NSUUID UUID];
     self.currentUUID = uuid;
     CXCallUpdate *update = [[CXCallUpdate alloc] init];
     update.supportsHolding = NO;

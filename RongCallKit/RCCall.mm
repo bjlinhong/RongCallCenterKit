@@ -406,7 +406,7 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
 //RCCallKit_Delete_Start
 #if PUBLIC
 #else
-    if (isVoIPPush) {
+//    if (isVoIPPush) {
         NSInteger checker = [RCCallKitUtility compareVersion:[UIDevice currentDevice].systemVersion toVersion:@"10.0"];
         if (checker >= 0) {
             if (mediaType == RCSCallMediaTypeAudio) {
@@ -423,7 +423,7 @@ static NSString *const __RongCallKit__Time = @"__RongCallKit__Time__Unknown";
                 return;
             }
         }
-    }
+//    }
 #endif
     //RCCallKit_Delete_end
 
