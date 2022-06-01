@@ -1642,6 +1642,8 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
     [self resetLayout:self.callSession.isMultiCall
             mediaType:self.callSession.mediaType
            callStatus:self.callSession.callStatus];
+    
+    self.tipsLabel.text = @"Starting";
 }
 
 /*!
@@ -1700,6 +1702,8 @@ NSNotificationName const RCCallNewSessionCreationNotification = @"RCCallNewSessi
     [self resetLayout:self.callSession.isMultiCall
             mediaType:self.callSession.mediaType
            callStatus:self.callSession.callStatus];
+    
+    self.tipsLabel.text = @"Ringing";
 }
 
 /*!
