@@ -31,11 +31,16 @@
 }
 
 - (instancetype)initWithOutgoingCall:(NSString *)targetId mediaType:(RCSCallMediaType)mediaType {
+    NSMutableArray *userIdArray = [NSMutableArray array];
+    if (targetId) {
+        [userIdArray addObject:targetId];
+    }
+    
     return [super initWithOutgoingCall:RCSCallTypeSingle
                         secretChatType:RCSCallSecretChatTypeNO
                               targetId:targetId
                              mediaType:mediaType
-                            userIdList:@[targetId]];
+                            userIdList:userIdArray];
 }
 
 - (instancetype)initWithActiveCall:(RCSCallSession *)callSession {
